@@ -1,3 +1,4 @@
+from utils.enigma import Enigma
 from utils.entry_wheel import EntryWheel
 from utils.reflector import Reflector
 from utils.scrambler import Scrambler

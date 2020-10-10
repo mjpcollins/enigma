@@ -22,14 +22,19 @@ class Test_Settings(TestCase):
         self.assertListEqual([], self.settings._wheels_data)
         self.settings.add_wheel(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
                                 start_position="G",
-                                turnover="AM")
-        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"}],
+                                turnover="AM",
+                                position=0)
+        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G",
+                               "turnover": "AM", "position": 0}],
                              self.settings._wheels_data)
         self.settings.add_wheel(letters="YFQWKIATGLORSJCDEMUXPNVZBH",
                                 start_position="F",
-                                turnover="KG")
-        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
-                              {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG"}],
+                                turnover="KG",
+                                position=1)
+        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G",
+                               "turnover": "AM", "position": 0},
+                              {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F",
+                               "turnover": "KG", "position": 1}],
                              self.settings._wheels_data)
 
     def test_set_entry_wheel(self):
@@ -57,10 +62,10 @@ class Test_Settings(TestCase):
         self.assertListEqual([], self.settings._wheels_data)
 
     def test_get_wheels_data(self):
-        self.settings._wheels_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
-                                      {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG"}]
-        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
-                              {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG"}],
+        self.settings._wheels_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
+                                      {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG", "position": 1}]
+        self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
+                              {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG", "position": 1}],
                              self.settings.get_wheels_data())
 
     def test_get_reflector_data(self):

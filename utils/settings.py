@@ -11,10 +11,11 @@ class Settings:
     def set_reflector(self, letters):
         self._reflector_data = {"letters": letters}
 
-    def add_wheel(self, letters, start_position, turnover):
+    def add_wheel(self, letters, start_position, turnover, position):
         wheel_data = {"letters": letters,
                       "start_position": start_position,
-                      "turnover": turnover}
+                      "turnover": turnover,
+                      "position": position}
         self._wheels_data.append(wheel_data)
 
     def set_entry_wheel(self, letters="ABCEDFGHIJKLMNOPQRSTUVWXYZ"):

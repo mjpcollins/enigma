@@ -1,3 +1,4 @@
+from _tests.unittests.test_enigma import Test_Enigma
 from _tests.unittests.test_entry_wheel import Test_EntryWheel
 from _tests.unittests.test_reflector import Test_Reflector
 from _tests.unittests.test_scrambler import Test_Scrambler
