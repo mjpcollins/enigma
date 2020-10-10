@@ -1,9 +1,8 @@
-import unittest
+from unittest import TestCase
 from utils import Swapper
-import random
 
 
-class Test_Swapper(unittest.TestCase):
+class Test_Swapper(TestCase):
 
     def setUp(self):
         self.swapper = Swapper(letters="CDEMUXPNVZBHYFQWKIATGLORSJ")
