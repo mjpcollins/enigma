@@ -17,6 +17,7 @@ class Settings:
                       "turnover": turnover,
                       "position": position}
         self._wheels_data.append(wheel_data)
+        self._wheels_data.sort(key=lambda x: x['position'])
 
     def set_entry_wheel(self, letters="ABCEDFGHIJKLMNOPQRSTUVWXYZ"):
         self._entry_wheel_data = {"letters": letters}
