@@ -5,5 +5,5 @@ from utils.scrambler import Scrambler
 from utils.settings import Settings
 from utils.swapper import Swapper
 from utils.switchboard import Switchboard
-from utils.wheel import Wheel
+from utils.rotor import Rotor
 

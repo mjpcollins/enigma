@@ -1,27 +1,26 @@
 from unittest import TestCase
-from utils import Wheel
+from utils import Rotor
 
 
-class Test_Wheel(TestCase):
+class Test_Rotor(TestCase):
 
     def setUp(self):
-        self.plain_wheel = Wheel(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
-                                 start_position="C",
+                                        #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        self.plain_wheel = Rotor(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
+                                 start_position="A",
                                  turnover="E",
                                  position=0)
-        self.offset_wheel = Wheel(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
+        self.offset_wheel = Rotor(letters="DEMUXPNVZBHYFQWKIATGLORSJC",
                                   start_position="D",
                                   turnover="E",
                                   position=1)
 
     def test_plain_wheel_init(self):
         self.assertEqual("CDEMUXPNVZBHYFQWKIATGLORSJ", self.plain_wheel._letters)
-        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.plain_wheel._alphabet)
-        self.assertEqual("C", self.plain_wheel._starting_pos)
+        self.assertEqual("A", self.plain_wheel._starting_pos)
         self.assertEqual("E", self.plain_wheel._turnover)
         self.assertEqual(0, self.plain_wheel._position)
         self.assertEqual("DEMUXPNVZBHYFQWKIATGLORSJC", self.offset_wheel._letters)
-        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.offset_wheel._alphabet)
         self.assertEqual("D", self.offset_wheel._starting_pos)
         self.assertEqual("E", self.offset_wheel._turnover)
         self.assertEqual(1, self.offset_wheel._position)
@@ -31,18 +30,17 @@ class Test_Wheel(TestCase):
         self.assertEqual(False, self.offset_wheel < self.plain_wheel)
 
     def test_position_in_machine(self):
-        self.assertEqual(0, self.plain_wheel.get_position_in_machine())
-        self.plain_wheel._position = 1
-        self.assertEqual(1, self.plain_wheel.get_position_in_machine())
+        self.assertEqual(0, self.plain_wheel.position_in_machine())
+        self.assertEqual(1, self.offset_wheel.position_in_machine())
 
     def test_get_current_position(self):
-        self.plain_wheel._current_pos = "A"
         self.assertEqual("A", self.plain_wheel.get_current_position())
+        self.assertEqual("D", self.offset_wheel.get_current_position())
 
     def test_set_current_position(self):
-        self.plain_wheel._current_pos = "A"
+        self.plain_wheel._offset = 0
         self.plain_wheel.set_current_position("Z")
-        self.assertEqual("Z", self.plain_wheel._current_pos)
+        self.assertEqual(25, self.plain_wheel._offset)
 
     def test_plain_wheel_forward_flow(self):
         self.assertEqual("M", self.plain_wheel.forward_flow("D"))
@@ -56,20 +54,5 @@ class Test_Wheel(TestCase):
 
     def test_plain_wheel_rotate_once(self):
         self.assertEqual("M", self.plain_wheel.forward_flow("D"))
-        self.assertEqual(False, self.plain_wheel.rotate_once())
-        self.assertEqual("U", self.plain_wheel.forward_flow("D"))
-
-    def test_offset_wheel_rotate_once(self):
-        self.assertEqual("U", self.offset_wheel.forward_flow("D"))
-        self.assertEqual(False, self.offset_wheel.rotate_once())
-        self.assertEqual("X", self.offset_wheel.forward_flow("D"))
-        self.assertEqual(True, self.offset_wheel.rotate_once())
-        self.assertEqual("P", self.offset_wheel.forward_flow("D"))
-
-    def test_will_cause_turnover(self):
-        self.plain_wheel._turnover = "E"
-        self.plain_wheel._current_pos = "A"
-        self.assertEqual(False, self.plain_wheel.will_cause_turnover())
-        self.plain_wheel._current_pos = "E"
-        self.assertEqual(True, self.plain_wheel.will_cause_turnover())
-
+        self.plain_wheel.rotate_once()
+        self.assertEqual("V", self.plain_wheel.forward_flow("D"))

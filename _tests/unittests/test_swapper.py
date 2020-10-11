@@ -5,20 +5,88 @@ from utils import Swapper
 class Test_Swapper(TestCase):
 
     def setUp(self):
-        self.swapper = Swapper(letters="CDEMUXPNVZBHYFQWKIATGLORSJ")
+                                      #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        self.swapper = Swapper(letters="EKMFLGDQVZNTOWYHXUSPAIBRCJ")
 
     def test_init(self):
-        self.assertEqual("CDEMUXPNVZBHYFQWKIATGLORSJ", self.swapper._letters)
-        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.swapper._alphabet)
+        self.assertEqual("EKMFLGDQVZNTOWYHXUSPAIBRCJ", self.swapper._letters)
+        self.assertEqual(0, self.swapper._offset)
+
+    def test_right_to_left(self):
+        self.assertEqual("F", self.swapper._right_to_left("D"))
+        self.assertEqual("J", self.swapper._right_to_left("Z"))
+
+    def test_left_to_right(self):
+        self.assertEqual("G", self.swapper._left_to_right("D"))
+        self.assertEqual("J", self.swapper._left_to_right("Z"))
 
     def test_forwardflow(self):
-        self.assertEqual("M", self.swapper.forward_flow("D"))
-        self.assertEqual("C", self.swapper.forward_flow("A"))
+        self.assertEqual("F", self.swapper.forward_flow("D"))
         self.assertEqual("J", self.swapper.forward_flow("Z"))
 
     def test_reverseflow(self):
-        self.assertEqual("B", self.swapper.reverse_flow("D"))
-        self.assertEqual("S", self.swapper.reverse_flow("A"))
+        self.assertEqual("G", self.swapper.reverse_flow("D"))
         self.assertEqual("J", self.swapper.reverse_flow("Z"))
 
+    def test_add_letter_offset(self):
+        self.swapper._offset = 1
+        self.assertEqual("B", self.swapper._add_letter_offset("A"))
+        self.assertEqual("A", self.swapper._add_letter_offset("Z"))
 
+    def test_minus_letter_offset(self):
+        self.swapper._offset = 1
+        self.assertEqual("Z", self.swapper._minus_letter_offset("A"))
+        self.assertEqual("Y", self.swapper._minus_letter_offset("Z"))
+
+    def test_increase_offset(self):
+        self.assertEqual(0, self.swapper._offset)
+        self.swapper.increase_offset()
+        self.assertEqual(1, self.swapper._offset)
+        self.swapper.increase_offset()
+        self.assertEqual(2, self.swapper._offset)
+
+    def test_decrease_offset(self):
+        self.swapper._offset = 2
+        self.assertEqual(2, self.swapper._offset)
+        self.swapper.decrease_offset()
+        self.assertEqual(1, self.swapper._offset)
+        self.swapper.decrease_offset()
+        self.assertEqual(0, self.swapper._offset)
+
+    def test_offset_loops(self):
+        self.swapper._offset = 25
+        self.assertEqual(25, self.swapper._offset)
+        self.swapper.increase_offset()
+        self.assertEqual(0, self.swapper._offset)
+        self.swapper.decrease_offset()
+        self.assertEqual(25, self.swapper._offset)
+
+    def test_add_offset(self):
+        self.swapper._offset = 2
+        self.assertEqual(4, self.swapper._add_offset(2))
+        self.assertEqual(1, self.swapper._add_offset(25))
+
+    def test_minus_offset(self):
+        self.swapper._offset = 2
+        self.assertEqual(2, self.swapper._minus_offset(4))
+        self.assertEqual(25, self.swapper._minus_offset(1))
+
+    def test_forward_flow_after_increase_offset(self):
+        self.swapper._offset = 1
+        self.assertEqual("K", self.swapper.forward_flow("D"))
+        self.assertEqual("D", self.swapper.forward_flow("Z"))
+
+    def test_forward_flow_after_decrease_offset(self):
+        self.swapper._offset = 25
+        self.assertEqual("N", self.swapper.forward_flow("D"))
+        self.assertEqual("D", self.swapper.forward_flow("Z"))
+
+    # def test_reverse_flow_after_increase_offset(self):
+    #     self.swapper._offset = 1
+    #     self.assertEqual("D", self.swapper.reverse_flow("D"))
+    #     self.assertEqual("T", self.swapper.reverse_flow("Z"))
+    #
+    # def test_reverse_flow_after_decrease_offset(self):
+    #     self.swapper._offset = 25
+    #     self.assertEqual("Z", self.swapper.reverse_flow("D"))
+    #     self.assertEqual("L", self.swapper.reverse_flow("Z"))

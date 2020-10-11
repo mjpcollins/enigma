@@ -17,12 +17,13 @@ class TestSuiteLoader:
     def _add_tests(self):
         self._add_test_to_list_of_tests(Test_Enigma)
         self._add_test_to_list_of_tests(Test_EntryWheel)
+        self._add_test_to_list_of_tests(Test_Misc)
         self._add_test_to_list_of_tests(Test_Reflector)
         self._add_test_to_list_of_tests(Test_Scrambler)
         self._add_test_to_list_of_tests(Test_Settings)
         self._add_test_to_list_of_tests(Test_Swapper)
         self._add_test_to_list_of_tests(Test_Switchboard)
-        self._add_test_to_list_of_tests(Test_Wheel)
+        self._add_test_to_list_of_tests(Test_Rotor)
 
     def _add_test_to_list_of_tests(self, test_object):
         self.all_tests.append(self.test_loader.loadTestsFromTestCase(test_object))

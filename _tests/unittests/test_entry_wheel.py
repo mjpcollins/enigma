@@ -10,7 +10,6 @@ class Test_EntryWheel(TestCase):
 
     def test_entry_wheel_swaps_init(self):
         self.assertEqual("CDEMUXPNVZBHYFQWKIATGLORSJ", self.entry_wheel_swaps._letters)
-        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.entry_wheel_swaps._alphabet)
 
     def test_entry_wheel_swaps_forwardflow(self):
         self.assertEqual("M", self.entry_wheel_swaps.forward_flow("D"))
@@ -24,7 +23,6 @@ class Test_EntryWheel(TestCase):
 
     def test_entry_wheel_plain_init(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.entry_wheel_plain._letters)
-        self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ", self.entry_wheel_plain._alphabet)
 
     def test_entry_wheel_plain_forwardflow(self):
         self.assertEqual("D", self.entry_wheel_plain.forward_flow("D"))

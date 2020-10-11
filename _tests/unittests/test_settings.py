@@ -9,8 +9,8 @@ class Test_Settings(TestCase):
 
     def test_init(self):
         self.assertDictEqual({}, self.settings._reflector_data)
-        self.assertListEqual([], self.settings._wheels_data)
-        self.assertDictEqual({"letters": "ABCEDFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
+        self.assertListEqual([], self.settings._rotors_data)
+        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
         self.assertDictEqual({"pairs": []}, self.settings._switchboard_data)
 
     def test_set_reflector(self):
@@ -19,15 +19,15 @@ class Test_Settings(TestCase):
         self.assertDictEqual({"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ"}, self.settings._reflector_data)
 
     def test_add_wheel(self):
-        self.assertListEqual([], self.settings._wheels_data)
-        self.settings.add_wheel(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
+        self.assertListEqual([], self.settings._rotors_data)
+        self.settings.add_rotor(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
                                 start_position="G",
                                 turnover="AM",
                                 position=0)
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G",
                                "turnover": "AM", "position": 0}],
-                             self.settings._wheels_data)
-        self.settings.add_wheel(letters="YFQWKIATGLORSJCDEMUXPNVZBH",
+                             self.settings._rotors_data)
+        self.settings.add_rotor(letters="YFQWKIATGLORSJCDEMUXPNVZBH",
                                 start_position="F",
                                 turnover="KG",
                                 position=1)
@@ -35,10 +35,10 @@ class Test_Settings(TestCase):
                                "turnover": "AM", "position": 0},
                               {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F",
                                "turnover": "KG", "position": 1}],
-                             self.settings._wheels_data)
+                             self.settings._rotors_data)
 
     def test_set_entry_wheel(self):
-        self.assertDictEqual({"letters": "ABCEDFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
+        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
         self.settings.set_entry_wheel("YFQWKIATGLORSJCDEMUXPNVZBH")
         self.assertDictEqual({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}, self.settings._entry_wheel_data)
 
@@ -49,24 +49,24 @@ class Test_Settings(TestCase):
                              self.settings._switchboard_data)
 
     def test_remove_wheel(self):
-        self.settings._wheels_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
+        self.settings._rotors_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
                                       {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG"}]
-        self.settings.remove_wheel()
+        self.settings.remove_rotor()
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"}],
-                             self.settings._wheels_data)
+                             self.settings._rotors_data)
 
     def test_remove_all_wheels(self):
-        self.settings._wheels_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
+        self.settings._rotors_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM"},
                                       {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG"}]
-        self.settings.remove_all_wheels()
-        self.assertListEqual([], self.settings._wheels_data)
+        self.settings.remove_all_rotors()
+        self.assertListEqual([], self.settings._rotors_data)
 
     def test_get_wheels_data(self):
-        self.settings._wheels_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
+        self.settings._rotors_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
                                       {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG", "position": 1}]
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
                               {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG", "position": 1}],
-                             self.settings.get_wheels_data())
+                             self.settings.get_rotors_data())
 
     def test_get_reflector_data(self):
         self.assertDictEqual({}, self.settings.get_reflector_data())
@@ -74,7 +74,7 @@ class Test_Settings(TestCase):
         self.assertDictEqual({"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ"}, self.settings.get_reflector_data())
 
     def test_get_entry_wheel_data(self):
-        self.assertDictEqual({"letters": "ABCEDFGHIJKLMNOPQRSTUVWXYZ"}, self.settings.get_entry_wheel_data())
+        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings.get_entry_wheel_data())
         self.settings._entry_wheel_data = {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}
         self.assertDictEqual({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}, self.settings.get_entry_wheel_data())
 
