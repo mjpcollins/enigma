@@ -68,3 +68,11 @@ class Test_Rotor(TestCase):
         self.assertEqual(False, self.plain_wheel.previous_letter_caused_turnover())
         self.plain_wheel._offset = 5
         self.assertEqual(True, self.plain_wheel.previous_letter_caused_turnover())
+
+    def test_handle_ring_setting(self):
+        self.assertEqual("M", self.plain_wheel.forward_flow("D"))
+        self.plain_wheel.set_ring_setting(3)
+        self.assertEqual("F", self.plain_wheel.forward_flow("D"))
+        self.plain_wheel._offset = 3
+        self.plain_wheel.set_ring_setting(3)
+        self.assertEqual("M", self.plain_wheel.forward_flow("D"))

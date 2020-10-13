@@ -12,11 +12,12 @@ class Settings:
     def set_reflector(self, letters):
         self._reflector_data = {"letters": letters}
 
-    def add_rotor(self, letters, start_position, turnover, position):
+    def add_rotor(self, letters, start_position, position, turnover="", ring_setting=0):
         rotor_data = {"letters": letters,
                       "start_position": start_position,
                       "turnover": turnover,
-                      "position": position}
+                      "position": position,
+                      "ring_setting": ring_setting}
         self._rotors_data.append(rotor_data)
         self._rotors_data.sort(key=lambda x: x['position'])
 

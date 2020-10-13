@@ -4,15 +4,17 @@ from utils.misc import number_to_alpha
 
 class Rotor(Swapper):
 
-    def __init__(self, letters, start_position, turnover, position):
+    def __init__(self, letters, start_position, turnover,
+                 position, ring_setting=0):
         super(Rotor, self).__init__(letters=letters)
         self._starting_pos = start_position
         self._turnover = turnover
         self.set_current_position(self._starting_pos)
         self._position = position
+        self.set_ring_setting(ring_setting)
 
     def __gt__(self, other_rotor):
-        return self.position_in_machine() < other_rotor.position_in_machine()
+        return other_rotor.position_in_machine() > self.position_in_machine()
 
     def position_in_machine(self):
         return self._position

@@ -105,3 +105,45 @@ class Test_Swapper(TestCase):
         self.swapper_1._offset = 25
         self.assertEqual("Z", self.swapper_1.reverse_flow("D"))
         self.assertEqual("P", self.swapper_1.reverse_flow("Z"))
+
+    def test_get_ring_setting(self):
+        self.assertEqual(0, self.swapper_1.get_ring_setting())
+        self.swapper_1._ring_offset = 3
+        self.assertEqual(3, self.swapper_1.get_ring_setting())
+
+    def test_set_ring_setting(self):
+        self.assertEqual(0, self.swapper_1._ring_offset)
+        self.swapper_1.set_ring_setting(3)
+        self.assertEqual(3, self.swapper_1._ring_offset)
+
+    def test_can_handle_forward_flow_ring_offset(self):
+        self.swapper_1._offset = 0
+        self.swapper_1._ring_offset = 0
+        self.assertEqual("F", self.swapper_1.forward_flow("D"))
+        self.swapper_1._offset = 1
+        self.swapper_1._ring_offset = 1
+        self.assertEqual("F", self.swapper_1.forward_flow("D"))
+        self.swapper_1._offset = 0
+        self.swapper_1._ring_offset = 1
+        self.assertEqual("N", self.swapper_1.forward_flow("D"))
+        self.swapper_1._offset = 1
+        self.swapper_1._ring_offset = 2
+        self.assertEqual("N", self.swapper_1.forward_flow("D"))
+
+    def test_can_handle_reverse_flow_ring_offset(self):
+        self.swapper_1._offset = 0
+        self.swapper_1._ring_offset = 0
+        self.assertEqual("G", self.swapper_1._left_to_right("D"))
+        self.swapper_1._offset = 1
+        self.swapper_1._ring_offset = 1
+        self.assertEqual("G", self.swapper_1._left_to_right("D"))
+        self.swapper_1._offset = 0
+        self.swapper_1._ring_offset = 1
+        self.assertEqual("Z", self.swapper_1.reverse_flow("D"))
+        self.swapper_1._offset = 1
+        self.swapper_1._ring_offset = 2
+        self.assertEqual("Z", self.swapper_1.reverse_flow("D"))
+
+
+
+
