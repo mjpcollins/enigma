@@ -12,7 +12,7 @@ class Rotor(Swapper):
         self._position = position
 
     def __gt__(self, other_rotor):
-        return self.position_in_machine() > other_rotor.position_in_machine()
+        return self.position_in_machine() < other_rotor.position_in_machine()
 
     def position_in_machine(self):
         return self._position
@@ -27,6 +27,10 @@ class Rotor(Swapper):
     def will_cause_turnover(self):
         return self.get_current_position() in self._turnover
 
+    def previous_letter_caused_turnover(self):
+        return number_to_alpha(self._offset - 1) in self._turnover
+
     def rotate_once(self):
         self.increase_offset()
+
 

@@ -10,6 +10,7 @@ class Scrambler:
         self._reflector = Reflector(**self._settings.get_reflector_data())
         self._rotors = [Rotor(**data) for data in self._settings.get_rotors_data()]
         self._entry_wheel = EntryWheel(**self._settings.get_entry_wheel_data())
+        self._rotors.sort()
 
     def scramble_letter(self, letter):
         self.rotate_rotors()
@@ -35,8 +36,6 @@ class Scrambler:
             if self._rotors[idx].will_cause_turnover():
                 turnover_rotors.append(self._rotors[idx])
                 turnover_rotors.append(self._rotors[idx + 1])
-            else:
-                break
         return turnover_rotors
 
     def flow_through(self, letter):

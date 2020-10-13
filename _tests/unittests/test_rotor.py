@@ -26,8 +26,8 @@ class Test_Rotor(TestCase):
         self.assertEqual(1, self.offset_wheel._position)
 
     def test__gt(self):
-        self.assertEqual(True, self.offset_wheel > self.plain_wheel)
-        self.assertEqual(False, self.offset_wheel < self.plain_wheel)
+        self.assertEqual(False, self.offset_wheel > self.plain_wheel)
+        self.assertEqual(True, self.offset_wheel < self.plain_wheel)
 
     def test_position_in_machine(self):
         self.assertEqual(0, self.plain_wheel.position_in_machine())
@@ -55,4 +55,16 @@ class Test_Rotor(TestCase):
     def test_plain_wheel_rotate_once(self):
         self.assertEqual("M", self.plain_wheel.forward_flow("D"))
         self.plain_wheel.rotate_once()
-        self.assertEqual("V", self.plain_wheel.forward_flow("D"))
+        self.assertEqual("T", self.plain_wheel.forward_flow("D"))
+
+    def test_will_cause_turnover(self):
+        self.plain_wheel._offset = 0
+        self.assertEqual(False, self.plain_wheel.will_cause_turnover())
+        self.plain_wheel._offset = 4
+        self.assertEqual(True, self.plain_wheel.will_cause_turnover())
+
+    def test_previous_letter_caused_turnover(self):
+        self.plain_wheel._offset = 4
+        self.assertEqual(False, self.plain_wheel.previous_letter_caused_turnover())
+        self.plain_wheel._offset = 5
+        self.assertEqual(True, self.plain_wheel.previous_letter_caused_turnover())
