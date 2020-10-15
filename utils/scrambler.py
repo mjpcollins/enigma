@@ -21,9 +21,9 @@ class Scrambler:
             rotor.rotate_once()
 
     def _find_rotors_permitted_to_rotate(self):
-        fast_rotor = [self._find_fast_rotor()]
-        turnovers = self._find_rotors_to_turnover()
-        rotors_to_turn = list(set(fast_rotor + turnovers))
+        rotors_set = set([self._find_fast_rotor()] + self._find_rotors_to_turnover())
+        self._remove_fourth_rotor(rotors_set)
+        rotors_to_turn = list(rotors_set)
         rotors_to_turn.sort()
         return rotors_to_turn
 
@@ -35,6 +35,14 @@ class Scrambler:
             return self._rotors[-1]
         else:
             return None
+
+    def _remove_fourth_rotor(self, rotors_set):
+        fourth_rotor = self._find_fourth_rotor()
+        if fourth_rotor:
+            try:
+                rotors_set.remove(fourth_rotor)
+            except KeyError:
+                pass
 
     def _find_rotors_to_turnover(self):
         turnover_rotors = []

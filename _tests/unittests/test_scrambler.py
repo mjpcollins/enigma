@@ -5,23 +5,27 @@ from utils import Scrambler, Settings, Data
 class Test_Scrambler(TestCase):
 
     def setUp(self):
-        # Set up for I-II-III-B, AAB
+        settings = Settings()
+        settings_4th_rotor = Settings()
 
         self.data = Data()
         self.data.set_machine("example_machine")
+        self.gamma = self.data.get_rotor("gamma")
         self.i = self.data.get_rotor("i")
         self.ii = self.data.get_rotor("ii")
         self.iii = self.data.get_rotor("iii")
-        self.gamma = self.data.get_rotor("gamma")
-        self.i.update({"start_position": "A", "position": 1})
-        self.ii.update({"start_position": "A", "position": 2})
-        self.iii.update({"start_position": "B", "position": 3})
-        self.gamma.update({"start_position": "A", "position": 4})
+        self.gamma.update({"start_position": "A", "position": 1})
+        self.i.update({"start_position": "A", "position": 2})
+        self.ii.update({"start_position": "A", "position": 3})
+        self.iii.update({"start_position": "B", "position": 4})
 
-        self.settings = Settings()
-        self.settings.set_reflector(**self.data.get_reflector("b"))
-        self.settings.add_rotors([self.i, self.ii, self.iii])
-        self.scrambler = Scrambler(settings=self.settings)
+        settings.set_reflector(**self.data.get_reflector("b"))
+        settings.add_rotors([self.i, self.ii, self.iii])
+        self.scrambler = Scrambler(settings=settings)
+
+        settings_4th_rotor.add_rotors([self.i, self.ii, self.iii, self.gamma])
+        settings_4th_rotor.set_reflector(**self.data.get_reflector("b"))
+        self.scrambler_with_fourth_rotor = Scrambler(settings=settings_4th_rotor)
 
     def test_flow_through(self):
         self.assertEqual("B", self.scrambler.flow_through("A"))
@@ -104,11 +108,24 @@ class Test_Scrambler(TestCase):
         self.assertEqual("N", self.scrambler._rotors[2].get_current_position())
 
     def test_find_fourth_rotor(self):
-        pass
+        self.assertEqual(None, self.scrambler._find_fourth_rotor())
+        self.assertEqual("FSOKANUERHMBTIYCWLQPZXVGJD", self.scrambler_with_fourth_rotor._find_fourth_rotor()._letters)
+
+    def test_remove_fourth_rotor(self):
+        rotors_selected = set(self.scrambler_with_fourth_rotor._rotors[0:])
+        expected = set(self.scrambler_with_fourth_rotor._rotors[0:3])
+        self.scrambler_with_fourth_rotor._remove_fourth_rotor(rotors_selected)
+        self.assertSetEqual(expected, rotors_selected)
 
     def test_never_move_4th_rotor(self):
-        pass
-
+        self.scrambler_with_fourth_rotor._rotors[0].set_current_position("V")
+        self.scrambler_with_fourth_rotor._rotors[1].set_current_position("E")
+        self.scrambler_with_fourth_rotor._rotors[2].set_current_position("Q")
+        self.scrambler_with_fourth_rotor.rotate_rotors()
+        self.assertEqual("W", self.scrambler_with_fourth_rotor._rotors[0].get_current_position())
+        self.assertEqual("F", self.scrambler_with_fourth_rotor._rotors[1].get_current_position())
+        self.assertEqual("R", self.scrambler_with_fourth_rotor._rotors[2].get_current_position())
+        self.assertEqual("A", self.scrambler_with_fourth_rotor._rotors[3].get_current_position())
 
     def assert_rotor_1_and_2_selected(self, wheels):
         self.assertEqual(2, len(wheels))

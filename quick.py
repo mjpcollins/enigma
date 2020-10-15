@@ -1,21 +1,21 @@
-from utils import Settings, Enigma
+from utils import Settings, Enigma, Data
 
 settings = Settings()
-settings.add_rotor(letters="EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                   start_position="M",
-                   turnover="Q",
-                   position=0)
-settings.add_rotor(letters="AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                   start_position="E",
-                   turnover="E",
-                   position=1)
-settings.add_rotor(letters="BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                   start_position="U",
-                   turnover="V",
-                   position=2)
-settings.set_reflector(letters="YRUHQSLDPXNGOKMIEBFZCWVJAT")
-# p = ["bq", "cr", "di", "ej", "kw", "mt", "os", "px", "uz", "gh"]
-# pairs = [pair.upper() for pair in p]
-# settings.set_switchboard_pairs(pairs)
-enigma = Enigma(settings=settings)
-print(enigma.press_key("A"))
+data = Data()
+data.set_machine("example_machine")
+iv = data.get_rotor("iv")
+v = data.get_rotor("v")
+beta = data.get_rotor("beta")
+i = data.get_rotor("i")
+a = data.get_reflector("a")
+iv.update({"start_position": "E", "ring_setting": 18, "position": 1})
+v.update({"start_position": "Z", "ring_setting": 24, "position": 2})
+beta.update({"start_position": "G", "ring_setting": 3, "position": 3})
+i.update({"start_position": "P", "ring_setting": 5, "position": 4})
+settings.add_rotors([iv, v, beta, i])
+settings.set_reflector(**a)
+settings.set_switchboard_pairs(["PC", "XZ", "FM", "QA", "ST",
+                                "NB", "HY", "OR", "EV", "IU"])
+message = Enigma(settings=settings).parse("BUPXWJCDPFASXBDHLBBIBSRNWCSZXQOLBNXYAXVHOGCUUIBCVMPUZYUUKHI")
+print(message)
+
