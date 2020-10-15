@@ -3,9 +3,6 @@ from utils.misc import alpha_to_number, number_to_alpha
 
 class Swapper:
 
-    # Simulation is a bit broken at the moment. I need to offset the turning of the rotors
-    # Assumed design of rotors was incorrect.
-
     def __init__(self, letters):
         self._letters = str(letters)
         self._offset = 0

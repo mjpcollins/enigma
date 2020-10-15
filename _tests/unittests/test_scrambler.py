@@ -1,5 +1,5 @@
 from unittest import TestCase
-from utils import Scrambler, Settings
+from utils import Scrambler, Settings, Data
 
 
 class Test_Scrambler(TestCase):
@@ -7,24 +7,20 @@ class Test_Scrambler(TestCase):
     def setUp(self):
         # Set up for I-II-III-B, AAB
 
+        self.data = Data()
+        self.data.set_machine("example_machine")
+        self.i = self.data.get_rotor("i")
+        self.ii = self.data.get_rotor("ii")
+        self.iii = self.data.get_rotor("iii")
+        self.gamma = self.data.get_rotor("gamma")
+        self.i.update({"start_position": "A", "position": 1})
+        self.ii.update({"start_position": "A", "position": 2})
+        self.iii.update({"start_position": "B", "position": 3})
+        self.gamma.update({"start_position": "A", "position": 4})
+
         self.settings = Settings()
-                                   #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        self.settings.set_reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT")
-                                       #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        self.settings.add_rotor(letters="EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                                start_position="A",
-                                turnover="Q",
-                                position=1)
-                                       #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        self.settings.add_rotor(letters="AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                                start_position="A",
-                                turnover="E",
-                                position=2)
-                                       #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        self.settings.add_rotor(letters="BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                                start_position="B",
-                                turnover="V",
-                                position=3)
+        self.settings.set_reflector(**self.data.get_reflector("b"))
+        self.settings.add_rotors([self.i, self.ii, self.iii])
         self.scrambler = Scrambler(settings=self.settings)
 
     def test_flow_through(self):
@@ -107,6 +103,13 @@ class Test_Scrambler(TestCase):
         self.assertEqual("G", self.scrambler._rotors[1].get_current_position())
         self.assertEqual("N", self.scrambler._rotors[2].get_current_position())
 
+    def test_find_fourth_rotor(self):
+        pass
+
+    def test_never_move_4th_rotor(self):
+        pass
+
+
     def assert_rotor_1_and_2_selected(self, wheels):
         self.assertEqual(2, len(wheels))
 
@@ -132,3 +135,4 @@ class Test_Scrambler(TestCase):
         self.assertEqual("EKMFLGDQVZNTOWYHXUSPAIBRCJ", wheels[2]._letters)
         self.assertEqual("B", wheels[0]._starting_pos)
         self.assertEqual("V", wheels[0]._turnover)
+

@@ -30,6 +30,12 @@ class Scrambler:
     def _find_fast_rotor(self):
         return self._rotors[0]
 
+    def _find_fourth_rotor(self):
+        if len(self._rotors) == 4:
+            return self._rotors[-1]
+        else:
+            return None
+
     def _find_rotors_to_turnover(self):
         turnover_rotors = []
         for idx in range(len(self._rotors) - 1):

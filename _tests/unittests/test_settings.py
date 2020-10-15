@@ -25,16 +25,16 @@ class Test_Settings(TestCase):
                                 turnover="AM",
                                 position=0)
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G",
-                               "turnover": "AM", "position": 0}],
+                               "turnover": "AM", "position": 0, "ring_setting": 0}],
                              self.settings._rotors_data)
         self.settings.add_rotor(letters="YFQWKIATGLORSJCDEMUXPNVZBH",
                                 start_position="F",
                                 turnover="KG",
                                 position=1)
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G",
-                               "turnover": "AM", "position": 0},
+                               "turnover": "AM", "position": 0, "ring_setting": 0},
                               {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F",
-                               "turnover": "KG", "position": 1}],
+                               "turnover": "KG", "position": 1, "ring_setting": 0}],
                              self.settings._rotors_data)
 
     def test_set_entry_wheel(self):

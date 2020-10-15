@@ -1,0 +1,107 @@
+{
+  "example_machine": {
+    "entry_wheel": {
+      "etw": {
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    "rotor": {
+      "beta": {
+        "letters": "LEYJVCNIXWPBQMDRTAKZGFUHOS",
+        "turnover": ""
+      },
+      "gamma": {
+        "letters": "FSOKANUERHMBTIYCWLQPZXVGJD",
+        "turnover": ""
+      },
+      "i": {
+        "letters": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+        "turnover": "Q"
+      },
+      "ii": {
+        "letters": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+        "turnover": "E"
+      },
+      "iii": {
+        "letters": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+        "turnover": "V"
+      },
+      "iv": {
+        "letters": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+        "turnover": "J"
+      },
+      "v": {
+        "letters": "VZBRGITYUPSDNHLXAWMJQOFECK",
+        "turnover": "Z"
+      }
+    },
+    "reflector": {
+      "a": {
+        "letters": "EJMZALYXVBWFCRQUONTSPIKHGD"
+      },
+      "b": {
+        "letters": "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+      },
+      "c": {
+        "letters": "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+      }
+    }
+  },
+  "m4": {
+    "entry_wheel": {
+      "etw": {
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    "rotor": {
+      "beta": {
+        "letters": "LEYJVCNIXWPBQMDRTAKZGFUHOS",
+        "turnover": ""
+      },
+      "gamma": {
+        "letters": "FSOKANUERHMBTIYCWLQPZXVGJD",
+        "turnover": ""
+      },
+      "i": {
+        "letters": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+        "turnover": "Q"
+      },
+      "ii": {
+        "letters": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+        "turnover": "E"
+      },
+      "iii": {
+        "letters": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+        "turnover": "V"
+      },
+      "iv": {
+        "letters": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+        "turnover": "J"
+      },
+      "v": {
+        "letters": "VZBRGITYUPSDNHLXAWMJQOFECK",
+        "turnover": "Z"
+      },
+      "vi": {
+        "letters": "JPGVOUMFYQBENHZRDKASXLICTW",
+        "turnover": "ZM"
+      },
+      "vii": {
+        "letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT",
+        "turnover": "ZM"
+      },
+      "viii": {
+        "letters": "FKQHTLXOCBJSPDZRAMEWNIUYGV",
+        "turnover": "ZM"
+      }
+    },
+    "reflector": {
+      "b-thin": {
+        "letters": "ENKQAUYWJICOPBLMDXZVFTHRGS"
+      },
+      "c-thin": {
+        "letters": "RDOBJNTKVEHMLFCWZAXGYIPSUQ"
+      }
+    }
+  }
+}

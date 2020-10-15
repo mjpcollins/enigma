@@ -1,3 +1,4 @@
+from _tests.unittests.test_data import Test_Data
 from _tests.unittests.test_enigma import Test_Enigma
 from _tests.unittests.test_entry_wheel import Test_EntryWheel
 from _tests.unittests.test_misc import Test_Misc
