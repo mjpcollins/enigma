@@ -35,4 +35,6 @@ class Rotor(Swapper):
     def rotate_once(self):
         self.increase_offset()
 
+    def has_notches(self):
+        return bool(self._turnover)
 

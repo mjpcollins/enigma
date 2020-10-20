@@ -153,3 +153,32 @@ class Test_Scrambler(TestCase):
         self.assertEqual("B", wheels[0]._starting_pos)
         self.assertEqual("V", wheels[0]._turnover)
 
+    def test_non_notch_rotor_preventing_rotations(self):
+        settings = Settings()
+        data = Data()
+        data.set_machine("example_machine")
+
+        iv = data.get_rotor("iv")
+        v = data.get_rotor("v")
+        beta = data.get_rotor("beta")
+        i = data.get_rotor("i")
+
+        iv.update({"start_position": "E", "ring_setting": 18, "position": 1})
+        v.update({"start_position": "Z", "ring_setting": 24, "position": 2})
+        beta.update({"start_position": "G", "ring_setting": 3, "position": 3})
+        i.update({"start_position": "P", "ring_setting": 5, "position": 4})
+
+        settings.add_rotors([iv, v, beta, i])
+        settings.set_reflector(**data.get_reflector("a"))
+
+        scrambler = Scrambler(settings=settings)
+        self.assertEqual("E", scrambler._rotors[3].get_current_position())
+        self.assertEqual("Z", scrambler._rotors[2].get_current_position())
+        self.assertEqual("G", scrambler._rotors[1].get_current_position())
+        self.assertEqual("P", scrambler._rotors[0].get_current_position())
+        scrambler.rotate_rotors()
+        self.assertEqual("E", scrambler._rotors[3].get_current_position())
+        self.assertEqual("Z", scrambler._rotors[2].get_current_position())
+        self.assertEqual("G", scrambler._rotors[1].get_current_position())
+        self.assertEqual("Q", scrambler._rotors[0].get_current_position())
+

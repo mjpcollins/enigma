@@ -14,6 +14,14 @@ class Test_Rotor(TestCase):
                                   start_position="D",
                                   turnover="E",
                                   position=1)
+        self.rotor_I = Rotor(letters="EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                             start_position="A",
+                             turnover="Q",
+                             position=1)
+        self.rotor_no_notch = Rotor(letters="EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                                    start_position="A",
+                                    turnover="",
+                                    position=1)
 
     def test_plain_wheel_init(self):
         self.assertEqual("CDEMUXPNVZBHYFQWKIATGLORSJ", self.plain_wheel._letters)
@@ -76,3 +84,11 @@ class Test_Rotor(TestCase):
         self.plain_wheel._offset = 3
         self.plain_wheel.set_ring_setting(3)
         self.assertEqual("M", self.plain_wheel.forward_flow("D"))
+
+    def test_single_rotor_I(self):
+        self.assertEqual("E", self.rotor_I.forward_flow("A"))
+        self.assertEqual("U", self.rotor_I.reverse_flow("A"))
+
+    def test_has_notches(self):
+        self.assertEqual(True, self.rotor_I.has_notches())
+        self.assertEqual(False, self.rotor_no_notch.has_notches())

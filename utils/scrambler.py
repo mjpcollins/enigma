@@ -48,8 +48,9 @@ class Scrambler:
         turnover_rotors = []
         for idx in range(len(self._rotors) - 1):
             if self._rotors[idx].will_cause_turnover():
-                turnover_rotors.append(self._rotors[idx])
-                turnover_rotors.append(self._rotors[idx + 1])
+                if (idx == 0) or self._rotors[idx - 1].has_notches():
+                    turnover_rotors.append(self._rotors[idx])
+                    turnover_rotors.append(self._rotors[idx + 1])
         return turnover_rotors
 
     def flow_through(self, letter):
