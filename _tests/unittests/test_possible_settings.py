@@ -16,62 +16,79 @@ class Test_PossibleSettings(TestCase):
     def test_init(self):
         self.assertEqual("./data/rotors.json", self.ps._data._filename)
         self.assertEqual("m4", self.ps._data._machine)
-        self.assertDictEqual({"entry_wheels": [], "rotor_1": {}, "rotor_2": {}, "rotor_3": {},
+        self.assertDictEqual({"machine": "m4", "entry_wheels": [], "rotor_1": {}, "rotor_2": {}, "rotor_3": {}, "rotor_4": {},
                               "reflectors": [], "switchboards": []}, self.ps._possible_settings)
 
     def test_set_machine(self):
         self.assertEqual("m4", self.ps._data._machine)
+        self.assertEqual("m4", self.ps._possible_settings['machine'])
         self.ps.set_machine("example_machine")
         self.assertEqual("example_machine", self.ps._data._machine)
+        self.assertEqual("example_machine", self.ps._possible_settings['machine'])
 
     def test_generate_rotor_possible_settings_all(self):
         self.ps.set_machine("example_machine")
-        expected_dict = {'rotor_choices': [{'letters': 'LEYJVCNIXWPBQMDRTAKZGFUHOS', 'turnover': ''}, {'letters': 'FSOKANUERHMBTIYCWLQPZXVGJD', 'turnover': ''}, {'letters': 'EKMFLGDQVZNTOWYHXUSPAIBRCJ', 'turnover': 'Q'}, {'letters': 'AJDKSIRUXBLHWTMCQGZNPYFVOE', 'turnover': 'E'}, {'letters': 'BDFHJLCPRTXVZNYEIWGAKMUSQO', 'turnover': 'V'}, {'letters': 'ESOVPZJAYQUIRHXLNFTGKDCMWB', 'turnover': 'J'}, {'letters': 'VZBRGITYUPSDNHLXAWMJQOFECK', 'turnover': 'Z'}],
+        expected_dict = {'rotor_choices': [{'letters': 'LEYJVCNIXWPBQMDRTAKZGFUHOS', 'turnover': '', 'position': 1},
+                                           {'letters': 'FSOKANUERHMBTIYCWLQPZXVGJD', 'turnover': '', 'position': 1},
+                                           {'letters': 'EKMFLGDQVZNTOWYHXUSPAIBRCJ', 'turnover': 'Q', 'position': 1},
+                                           {'letters': 'AJDKSIRUXBLHWTMCQGZNPYFVOE', 'turnover': 'E', 'position': 1},
+                                           {'letters': 'BDFHJLCPRTXVZNYEIWGAKMUSQO', 'turnover': 'V', 'position': 1},
+                                           {'letters': 'ESOVPZJAYQUIRHXLNFTGKDCMWB', 'turnover': 'J', 'position': 1},
+                                           {'letters': 'VZBRGITYUPSDNHLXAWMJQOFECK', 'turnover': 'Z', 'position': 1}],
                          'ring_settings': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
                          'start_positions': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'}
-        actual_dict = self.ps._generate_rotor_options()
+
+        actual_dict = self.ps._generate_rotor_options(machine_position=1)
         self.assertEqual(expected_dict, actual_dict)
 
-    def test_generate_rotor_possible_settings_limited(self):
-        actual_dict = self.ps._generate_rotor_options(rotors=['v', 'vi', 'vii'], ring_settings=[1, 5, 7], start_positions="ABCDEF")
-        self.assertEqual(self.expected_m4_settings, actual_dict)
-
     def test_generate_rotor_1_options(self):
+        expected_r1_settings = {'rotor_choices': [{"letters": "VZBRGITYUPSDNHLXAWMJQOFECK", "turnover": "Z", "position": 1},
+                                                  {"letters": "JPGVOUMFYQBENHZRDKASXLICTW", "turnover": "ZM", "position": 1},
+                                                  {"letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT", "turnover": "ZM", "position": 1}],
+                                'ring_settings': [1, 5, 7],
+                                'start_positions': 'ABCDEF'}
         self.ps.generate_rotor_1_options(rotors=['v', 'vi', 'vii'], ring_settings=[1, 5, 7], start_positions="ABCDEF")
-        self.assertEqual(self.expected_m4_settings, self.ps._possible_settings['rotor_1'])
+        self.assertEqual(expected_r1_settings, self.ps._possible_settings['rotor_1'])
 
     def test_generate_rotor_2_options(self):
+        expected_r2_settings = {'rotor_choices': [{"letters": "VZBRGITYUPSDNHLXAWMJQOFECK", "turnover": "Z", "position": 2},
+                                                  {"letters": "JPGVOUMFYQBENHZRDKASXLICTW", "turnover": "ZM", "position": 2},
+                                                  {"letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT", "turnover": "ZM", "position": 2}],
+                                'ring_settings': [1, 5, 7],
+                                'start_positions': 'ABCDEF'}
         self.ps.generate_rotor_2_options(rotors=['v', 'vi', 'vii'], ring_settings=[1, 5, 7], start_positions="ABCDEF")
-        self.assertEqual(self.expected_m4_settings, self.ps._possible_settings['rotor_2'])
+        self.assertEqual(expected_r2_settings, self.ps._possible_settings['rotor_2'])
 
     def test_generate_rotor_3_options(self):
+        expected_r3_settings = {'rotor_choices': [{"letters": "VZBRGITYUPSDNHLXAWMJQOFECK", "turnover": "Z", "position": 3},
+                                                  {"letters": "JPGVOUMFYQBENHZRDKASXLICTW", "turnover": "ZM", "position": 3},
+                                                  {"letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT", "turnover": "ZM", "position": 3}],
+                                'ring_settings': [1, 5, 7],
+                                'start_positions': 'ABCDEF'}
         self.ps.generate_rotor_3_options(rotors=['v', 'vi', 'vii'], ring_settings=[1, 5, 7], start_positions="ABCDEF")
-        self.assertEqual(self.expected_m4_settings, self.ps._possible_settings['rotor_3'])
+        self.assertEqual(expected_r3_settings, self.ps._possible_settings['rotor_3'])
+
+    def test_generate_rotor_4_options(self):
+        expected_r4_settings = {'rotor_choices': [{"letters": "VZBRGITYUPSDNHLXAWMJQOFECK", "turnover": "Z", "position": 4},
+                                                  {"letters": "JPGVOUMFYQBENHZRDKASXLICTW", "turnover": "ZM", "position": 4},
+                                                  {"letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT", "turnover": "ZM", "position": 4}],
+                                'ring_settings': [1, 5, 7],
+                                'start_positions': 'ABCDEF'}
+        self.ps.generate_rotor_4_options(rotors=['v', 'vi', 'vii'], ring_settings=[1, 5, 7], start_positions="ABCDEF")
+        self.assertEqual(expected_r4_settings, self.ps._possible_settings['rotor_4'])
 
     def test_generate_reflector_options(self):
-        expected_list = [Reflector(letters="ENKQAUYWJICOPBLMDXZVFTHRGS")._letters,
-                         Reflector(letters="RDOBJNTKVEHMLFCWZAXGYIPSUQ")._letters]
         self.ps.generate_reflector_options()
-
-        self.assertEqual(len(expected_list), len(self.ps._possible_settings['reflectors']))
-        for reflector in self.ps._possible_settings['reflectors']:
-            self.assertIn(reflector._letters, expected_list)
+        self.assertListEqual([{"letters": "ENKQAUYWJICOPBLMDXZVFTHRGS"}, {"letters": "RDOBJNTKVEHMLFCWZAXGYIPSUQ"}],
+                             self.ps._possible_settings['reflectors'])
 
     def test_generate_reflector_options_limited(self):
-        expected_list = [Reflector(letters="ENKQAUYWJICOPBLMDXZVFTHRGS")._letters]
         self.ps.generate_reflector_options(reflectors=["b-thin"])
-
-        self.assertEqual(len(expected_list), len(self.ps._possible_settings['reflectors']))
-        for reflector in self.ps._possible_settings['reflectors']:
-            self.assertIn(reflector._letters, expected_list)
+        self.assertListEqual([{"letters": "ENKQAUYWJICOPBLMDXZVFTHRGS"}], self.ps._possible_settings['reflectors'])
 
     def test_generate_entry_wheel_options(self):
-        expected_list = [EntryWheel()._letters]
         self.ps.generate_entry_wheel_options()
-
-        self.assertEqual(len(expected_list), len(self.ps._possible_settings['entry_wheels']))
-        for etw in self.ps._possible_settings['entry_wheels']:
-            self.assertIn(etw._letters, expected_list)
+        self.assertListEqual([{"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}], self.ps._possible_settings['entry_wheels'])
 
     def test_generate_iter_list(self):
         expected_pairs = ['AB', 'AC', 'AD', 'AE', 'AF',
@@ -97,7 +114,8 @@ class Test_PossibleSettings(TestCase):
                          ['AB', 'ZR', 'XS'], ['AB', 'ZR', 'XT'], ['AB', 'ZR', 'XU'],
                          ['AB', 'ZR', 'XV'], ['AB', 'ZR', 'XW'], ['AB', 'ZR', 'XY']]
         input_list = ['AB', 'ZR', 'X?']
-        self.assertListEqual(expected_list, self.ps.generate_switchboard_options(input_list))
+        self.ps.generate_switchboard_options(input_list)
+        self.assertListEqual(expected_list, self.ps._possible_settings['switchboards'])
 
     def test_remove_contradictions_from_switchboard(self):
         input_list = [['AB', 'ZR', 'XC'], ['AB', 'ZR', 'XD'], ['AB', 'ZR', 'XZ']]

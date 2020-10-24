@@ -15,6 +15,8 @@ class CribFinder:
                     break
                 potential_code = potential_code + code_letter
             if len(potential_code) == len(crib):
-                potential_codes.append(potential_code)
+                potential_code_dict = {'position': starting_position,
+                                       'code': potential_code}
+                potential_codes.append(potential_code_dict)
         return potential_codes
 

@@ -11,5 +11,5 @@ class Test_CribFinder(TestCase):
         self.assertEqual("JXATQBGGYWCRYBGDTAA", self.cf._code)
 
     def test_find_crib_in_code(self):
-        self.assertListEqual(["ATQBGGYWCRYBG", "BGGYWCRYBGDTA"],
+        self.assertListEqual([{"position": 2, "code": "ATQBGGYWCRYBG"}, {"position": 5, "code": "BGGYWCRYBGDTA"}],
                              self.cf.find_crib_in_code(crib="WETTERBERICHT"))

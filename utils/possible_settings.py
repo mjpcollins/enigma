@@ -1,8 +1,6 @@
+import itertools
 from string import ascii_uppercase
-from itertools import product
 from utils.data import Data
-from utils.reflector import Reflector
-from utils.entry_wheel import EntryWheel
 
 
 class PossibleSettings:
@@ -11,27 +9,40 @@ class PossibleSettings:
         if data is None:
             data = Data()
         self._data = data
-        self.set_machine("example_machine")
-        self._possible_settings = {"entry_wheels": [],
+        self._possible_settings = {"machine": "",
+                                   "entry_wheels": [],
                                    "rotor_1": {},
                                    "rotor_2": {},
                                    "rotor_3": {},
+                                   "rotor_4": {},
                                    "reflectors": [],
                                    "switchboards": []}
+        self.set_machine("example_machine")
 
     def set_machine(self, machine):
         self._data.set_machine(machine)
+        self._possible_settings['machine'] = machine
+
+    def get_settings(self):
+        return self._possible_settings
 
     def generate_rotor_1_options(self, **kwargs):
-        self._possible_settings['rotor_1'] = self._generate_rotor_options(**kwargs)
+        self._possible_settings['rotor_1'] = self._generate_rotor_options(machine_position=1,
+                                                                          **kwargs)
 
     def generate_rotor_2_options(self, **kwargs):
-        self._possible_settings['rotor_2'] = self._generate_rotor_options(**kwargs)
+        self._possible_settings['rotor_2'] = self._generate_rotor_options(machine_position=2,
+                                                                          **kwargs)
 
     def generate_rotor_3_options(self, **kwargs):
-        self._possible_settings['rotor_3'] = self._generate_rotor_options(**kwargs)
+        self._possible_settings['rotor_3'] = self._generate_rotor_options(machine_position=3,
+                                                                          **kwargs)
 
-    def _generate_rotor_options(self, rotors=None,
+    def generate_rotor_4_options(self, **kwargs):
+        self._possible_settings['rotor_4'] = self._generate_rotor_options(machine_position=4,
+                                                                          **kwargs)
+
+    def _generate_rotor_options(self, machine_position, rotors=None,
                                 ring_settings=None, start_positions=None):
         if start_positions is None:
             start_positions = ascii_uppercase
@@ -40,7 +51,12 @@ class PossibleSettings:
         if rotors is None:
             rotors = self._data.list_rotors()
 
-        rotor_choices = [self._data.get_rotor(rotor) for rotor in rotors]
+        rotor_choices = list()
+        for rotor in rotors:
+            rotor_data = self._data.get_rotor(rotor)
+            rotor_data['position'] = machine_position
+            rotor_choices.append(rotor_data)
+
         return_dict = {"rotor_choices": rotor_choices,
                        "ring_settings": ring_settings,
                        "start_positions": start_positions}
@@ -49,13 +65,13 @@ class PossibleSettings:
     def generate_reflector_options(self, reflectors=None):
         if reflectors is None:
             reflectors = self._data.list_reflectors()
-        self._possible_settings['reflectors'] = [Reflector(**self._data.get_reflector(reflector))
+        self._possible_settings['reflectors'] = [self._data.get_reflector(reflector)
                                                  for reflector in reflectors]
 
     def generate_entry_wheel_options(self, entry_wheels=None):
         if entry_wheels is None:
             entry_wheels = self._data.list_entry_wheels()
-        self._possible_settings['entry_wheels'] = [EntryWheel(**self._data.get_entry_wheel(entry_wheel))
+        self._possible_settings['entry_wheels'] = [self._data.get_entry_wheel(entry_wheel)
                                                    for entry_wheel in entry_wheels]
 
     def generate_switchboard_options(self, switchboard_setup=None):
@@ -66,11 +82,12 @@ class PossibleSettings:
         for swap_pair in switchboard_setup:
             if '?' in swap_pair:
                 iter_lists.append(self._generate_pairs_options_list(swap_pair, exclusions=all_letters))
-        all_switchboard_combinations = [list(option) for option in product(*iter_lists)]
+        all_switchboard_combinations = [list(option) for option in itertools.product(*iter_lists)]
         possible_switchboards = self._remove_contradictions_from_switchboard(all_switchboard_combinations)
-        return possible_switchboards
+        self._possible_settings['switchboards'] = possible_switchboards
 
-    def _generate_pairs_options_list(self, swap_pair, exclusions=""):
+    @staticmethod
+    def _generate_pairs_options_list(swap_pair, exclusions=""):
         remove_exclusions = str.maketrans("", "", exclusions)
         if swap_pair[0] is "?":
             left_options = ascii_uppercase.translate(remove_exclusions)
@@ -81,7 +98,7 @@ class PossibleSettings:
             right_options = ascii_uppercase.translate(remove_exclusions)
         else:
             right_options = swap_pair[1]
-        possible_pairs = ["".join(option) for option in product(left_options, right_options)
+        possible_pairs = ["".join(option) for option in itertools.product(left_options, right_options)
                           if option[0] != option[1]]
         return possible_pairs
 
