@@ -23,6 +23,15 @@ class Data:
     def get_entry_wheel(self, entry_wheel):
         return self._loaded_json[self._machine]['entry_wheel'].get(entry_wheel)
 
+    def list_rotors(self):
+        return list(self._loaded_json[self._machine]['rotor'].keys())
+
+    def list_reflectors(self):
+        return list(self._loaded_json[self._machine]['reflector'].keys())
+
+    def list_entry_wheels(self):
+        return list(self._loaded_json[self._machine]['entry_wheel'].keys())
+
     @staticmethod
     def _load_json(path):
         with open(path, "r") as F:

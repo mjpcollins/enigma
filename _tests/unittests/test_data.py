@@ -40,3 +40,15 @@ class Test_Data(TestCase):
         self.data._machine = "example_machine"
         self.assertEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.data.get_entry_wheel("etw"))
         self.assertEqual(None, self.data.get_entry_wheel("abba"))
+
+    def test_list_rotors(self):
+        self.data._machine = "example_machine"
+        self.assertListEqual(["beta", "i", "ii", "iii", "iv", "gamma", "v"], self.data.list_rotors())
+
+    def test_list_reflectors(self):
+        self.data._machine = "example_machine"
+        self.assertListEqual(["a", "b", "c"], self.data.list_reflectors())
+
+    def test_list_entry_wheels(self):
+        self.data._machine = "example_machine"
+        self.assertListEqual(["etw"], self.data.list_entry_wheels())
