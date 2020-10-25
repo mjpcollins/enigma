@@ -61,7 +61,7 @@ class Test_Settings(TestCase):
         self.settings.remove_all_rotors()
         self.assertListEqual([], self.settings._rotors_data)
 
-    def test_get_wheels_data(self):
+    def test_get_rotors_data(self):
         self.settings._rotors_data = [{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
                                       {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH", "start_position": "F", "turnover": "KG", "position": 1}]
         self.assertListEqual([{"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ", "start_position": "G", "turnover": "AM", "position": 0},
@@ -83,3 +83,12 @@ class Test_Settings(TestCase):
         self.settings._switchboard_data = {"pairs": ["NI", "KF", "PY", "VB", "CG", "WR", "TQ", "OS", "LH", "DZ"]}
         self.assertDictEqual({"pairs": ["NI", "KF", "PY", "VB", "CG", "WR", "TQ", "OS", "LH", "DZ"]},
                              self.settings.get_switchboard_data())
+
+    def test_set_rotor_start_position(self):
+        self.settings.add_rotor(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
+                                start_position="G",
+                                turnover="AM",
+                                position=0)
+        self.assertEqual("G", self.settings._rotors_data[0]['start_position'])
+        self.settings.set_rotor_start_position(0, "K")
+        self.assertEqual("K", self.settings._rotors_data[0]['start_position'])

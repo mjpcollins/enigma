@@ -145,3 +145,22 @@ class Test_Enigma(TestCase):
         enigma = Enigma(settings=settings)
         self.assertEqual("CONGRATULATIONSONPRODUCINGYOURWORKINGENIGMAMACHINESIMULATOR",
                          enigma.parse("BUPXWJCDPFASXBDHLBBIBSRNWCSZXQOLBNXYAXVHOGCUUIBCVMPUZYUUKHI"))
+
+    def test_B_II_IV_Beta_Gamma_4_24_17_7(self):
+        settings = Settings()
+        data = Data()
+        data.set_machine("example_machine")
+        ii = data.get_rotor("ii")
+        iv = data.get_rotor("iv")
+        beta = data.get_rotor("beta")
+        gamma = data.get_rotor("gamma")
+        ii.update({"start_position": "V", "ring_setting": 4, "position": 1})
+        iv.update({"start_position": "E", "ring_setting": 24, "position": 2})
+        beta.update({"start_position": "Q", "ring_setting": 17, "position": 3})
+        gamma.update({"start_position": "J", "ring_setting": 7, "position": 4})
+        settings.add_rotors([ii, iv, beta, gamma])
+        settings.set_reflector(**data.get_reflector("b"))
+        settings.set_switchboard_pairs(["AT", "LU", "NR", "IG"])
+        enigma = Enigma(settings=settings)
+        self.assertEqual("ACOMPUTERWOULDDESERVETOBECALLEDINTELLIGENTIFITCOULDDECEIVEAHUMANINTOBELIEVINGTHATITWASHUMANSOMETIMESITSTHEVERYPEOPLEWHONOONEIMAGINESANYTHINGOFWHODOTHETHINGSNOONECANIMAGINESOMETIMESITISTHEPEOPLENOONECANIMAGINEANYTHINGOFWHODOTHETHINGSNOONECANIMAGINETHOSEWHOCANIMAGINEANYTHINGCANCREATETHEIMPOSSIBLEALANTURING",
+                         enigma.parse("BHCHRJCBLHJBPWXCAPXQCUAZRKBBTFEXBQWJFGVATZUJLXEMZRLOJHFWTMFUCAGFOHNNCPIOCJKAHJTWLWVHFJAQCZDXAHHMLSCRKXMJTXYFPKMBJFFLSNAOYYWCUOOPCBJGJUHFVOZOJNSNAWYMTCKBKAHQPYCUDPFZGAGIOHLKYTSXUOBDCJSGLMDCOIXJHFIUTCBVWOXKROVLBFVSYXBDJPUOIWAZEPHNUXRDVDKFFRXOXXHOVFUGZNAPNNJEOACFBSXUDDBCDWVFVIOOBISLKCDMRPDDCTZXNVWMFZDGJXUGC"))

@@ -25,6 +25,9 @@ class Settings:
         self._rotors_data.append(rotor_data)
         self._rotors_data.sort(key=lambda x: x['position'])
 
+    def set_rotor_start_position(self, rotor_position, start_position):
+        self._rotors_data[rotor_position]['start_position'] = start_position
+
     def set_entry_wheel(self, letters=ascii_uppercase):
         self._entry_wheel_data = {"letters": letters}
 

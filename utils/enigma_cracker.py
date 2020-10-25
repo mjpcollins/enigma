@@ -1,22 +1,36 @@
 import itertools
+from string import ascii_uppercase
 from utils.crib_finder import CribFinder
 from utils.settings import Settings
 from utils.enigma import Enigma
 from utils.misc import shift_letter
 
 
-class SettingsFinder:
+class EnigmaCracker:
 
-    def __init__(self, code, cribs, possible_settings, starting_position=""):
-        self._code = code
-        self._cribs = cribs
+    def __init__(self, possible_settings, starting_position=""):
+        self._code = ""
+        self._cribs = []
         self._possible_settings = possible_settings.get_settings()
-        self.cf = CribFinder(code=code)
         self._clues = {}
-        self._find_clues()
         self._starting_position = starting_position
 
-    def find_settings(self):
+    def crack_code(self, code, cribs):
+        self._code = code
+        self._cribs = cribs
+        self._find_clues()
+        data = self._find_settings()
+        settings = data['settings']
+        if not self._starting_position:
+            self._starting_position = self._find_starting_position(data)
+        for indx, position in enumerate(self._starting_position):
+            settings.set_rotor_start_position(rotor_position=indx,
+                                              start_position=position)
+        enigma = Enigma(settings)
+        cracked_code = enigma.parse(self._code)
+        return {'settings': settings, 'cracked_code': cracked_code}
+
+    def _find_settings(self):
         for clue in self._clues:
             for encoded_clue in self._clues[clue]:
                 offset = encoded_clue['position']
@@ -26,12 +40,32 @@ class SettingsFinder:
                     self._possible_settings['rotor_1']['start_positions'] = possible_positions[0]
                     self._possible_settings['rotor_2']['start_positions'] = possible_positions[1]
                     self._possible_settings['rotor_3']['start_positions'] = possible_positions[2]
-                for settings in self._create_settings_generator_object():
-                    engima = Enigma(settings=settings)
-                    parsed = engima.parse(clue)
-                    if code == parsed:
-                        return settings
+                for idx, settings in enumerate(self._create_settings_generator_object()):
+                    print(encoded_clue, idx)
+                    if self._match(code=code, clue=clue, enigma_machine=Enigma(settings=settings)):
+                        return {'settings': settings, 'crib': encoded_clue, 'clue': clue}
         return None
+
+    def _match(self, code, clue, enigma_machine):
+        if len(clue) == 0:
+            return True
+        else:
+            if enigma_machine.press_key(clue[0]) == code[0]:
+                return self._match(code=code[1:], clue=clue[1:], enigma_machine=enigma_machine)
+            return False
+
+    def _find_starting_position(self, cracked_data):
+        settings = cracked_data['settings']
+        clue = cracked_data['clue']
+        for rotor1_letter in ascii_uppercase:
+            for rotor2_letter in ascii_uppercase:
+                for rotor3_letter in ascii_uppercase:
+                    settings.set_rotor_start_position(0, rotor1_letter)
+                    settings.set_rotor_start_position(1, rotor2_letter)
+                    settings.set_rotor_start_position(2, rotor3_letter)
+                    enigma = Enigma(settings)
+                    if clue in enigma.parse(self._code):
+                        return rotor1_letter + rotor2_letter + rotor3_letter
 
     def _estimate_rotor_positions(self, offset):
         rotor_1 = set(self._starting_position[0])
@@ -52,7 +86,7 @@ class SettingsFinder:
 
     def _find_clues(self):
         for crib in self._cribs:
-            self._clues[crib] = self.cf.find_crib_in_code(crib=crib)
+            self._clues[crib] = CribFinder(code=self._code).find_crib_in_code(crib=crib)
 
     def _create_settings_generator_object(self):
         for entry_wheel in self._possible_settings['entry_wheels']:
@@ -72,7 +106,9 @@ class SettingsFinder:
                           self._possible_settings['rotor_3'],
                           self._possible_settings['rotor_4']]
         slots = [self._create_rotor_slot_generator(rotor_slot) for rotor_slot in rotor_settings if rotor_slot]
-        return itertools.product(*slots)
+        for rotors_combination in itertools.product(*slots):
+            if self._distinct_rotors(rotors_combination):
+                yield rotors_combination
 
     @staticmethod
     def _create_rotor_slot_generator(rotor_slot):
@@ -84,3 +120,10 @@ class SettingsFinder:
                                        'start_position': start_position})
                     yield rotor_data
 
+    @staticmethod
+    def _distinct_rotors(rotor_combinations):
+        r1_letters = rotor_combinations[0]['letters']
+        r2_letters = rotor_combinations[1]['letters']
+        r3_letters = rotor_combinations[2]['letters']
+        letters_set = {r1_letters, r2_letters, r3_letters}
+        return len(letters_set) == len(rotor_combinations)
