@@ -9,6 +9,13 @@ class Settings:
         self._entry_wheel_data = {"letters": ascii_uppercase}
         self._switchboard_data = {"pairs": list()}
 
+    def __str__(self):
+        settings_dict = {'settings': {"reflector": self._reflector_data.get('letters'),
+                                      "entry_wheel": self._entry_wheel_data.get('letters'),
+                                      "switchboard": self._switchboard_data.get('pairs'),
+                                      "rotors": self._rotors_data}}
+        return str(settings_dict)
+
     def set_reflector(self, letters):
         self._reflector_data = {"letters": letters}
 

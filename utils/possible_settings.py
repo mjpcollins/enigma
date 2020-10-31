@@ -1,6 +1,6 @@
 import itertools
 from string import ascii_uppercase
-from utils.data import Data
+from utils.enigma_machine_data import EnigmaMachineData
 from utils.misc import letter_to_prime, alpha_to_number
 from utils.reflector import Reflector
 
@@ -9,16 +9,9 @@ class PossibleSettings:
 
     def __init__(self, data=None):
         if data is None:
-            data = Data()
+            data = EnigmaMachineData()
         self._data = data
-        self._possible_settings = {"machine": "",
-                                   "entry_wheels": [],
-                                   "rotor_1": {},
-                                   "rotor_2": {},
-                                   "rotor_3": {},
-                                   "rotor_4": {},
-                                   "reflectors": [],
-                                   "switchboards": []}
+        self._possible_settings = {}
         self.set_machine("example_machine")
 
     def set_machine(self, machine):

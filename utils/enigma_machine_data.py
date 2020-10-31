@@ -1,7 +1,7 @@
 import json
 
 
-class Data:
+class EnigmaMachineData:
 
     def __init__(self, filename="./data/rotors.json", machine=None):
         self._filename = filename

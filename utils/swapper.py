@@ -32,17 +32,17 @@ class Swapper:
     def set_ring_setting(self, position):
         self._ring_offset = position % 26
 
-    def _add_offset(self, indx):
-        return (indx + self._offset - self._ring_offset) % 26
-
-    def _minus_offset(self, indx):
-        return (indx - self._offset + self._ring_offset) % 26
-
     def _add_letter_offset(self, letter):
         return number_to_alpha(self._add_offset(alpha_to_number(letter)))
 
     def _minus_letter_offset(self, letter):
         return number_to_alpha(self._minus_offset(alpha_to_number(letter)))
+
+    def _add_offset(self, indx):
+        return (indx + self._offset - self._ring_offset) % 26
+
+    def _minus_offset(self, indx):
+        return (indx - self._offset + self._ring_offset) % 26
 
     def _right_to_left(self, letter):
         return self._letters[alpha_to_number(letter)]

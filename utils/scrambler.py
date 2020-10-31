@@ -21,36 +21,32 @@ class Scrambler:
             rotor.rotate_once()
 
     def _find_rotors_permitted_to_rotate(self):
-        rotors_set = set([self._find_fast_rotor()] + self._find_rotors_to_turnover())
-        self._remove_fourth_rotor(rotors_set)
-        rotors_to_turn = list(rotors_set)
-        rotors_to_turn.sort()
+        rotors_to_turn = set([self._find_fast_rotor()] + self._find_rotors_to_turnover())
+        self._remove_fourth_rotor(rotors_to_turn)
         return rotors_to_turn
 
     def _find_fast_rotor(self):
         return self._rotors[0]
 
-    def _find_fourth_rotor(self):
-        if len(self._rotors) == 4:
-            return self._rotors[-1]
-        else:
-            return None
-
     def _remove_fourth_rotor(self, rotors_set):
-        fourth_rotor = self._find_fourth_rotor()
-        if fourth_rotor:
-            try:
-                rotors_set.remove(fourth_rotor)
-            except KeyError:
-                pass
+        # It's faster and more "proper" in python to try & catch the error than to use an if statement
+        # https://stackoverflow.com/questions/7604636/better-to-try-something-and-catch-the-exception-or-test-if-its-possible-first
+        try:
+            rotors_set.remove(self._rotors[3])
+        except KeyError:
+            pass
+        except IndexError:
+            pass
 
     def _find_rotors_to_turnover(self):
         turnover_rotors = []
-        for idx in range(len(self._rotors) - 1):
-            if self._rotors[idx].will_cause_turnover():
-                if (idx == 0) or self._rotors[idx - 1].has_notches():
-                    turnover_rotors.append(self._rotors[idx])
-                    turnover_rotors.append(self._rotors[idx + 1])
+        for idx, this_rotor in enumerate(self._rotors[:-1]):
+            previous_rotor = self._rotors[idx - 1]
+            next_rotor = self._rotors[idx + 1]
+            if this_rotor.will_cause_turnover():
+                if (idx == 0) or previous_rotor.has_notches():
+                    turnover_rotors.append(this_rotor)
+                    turnover_rotors.append(next_rotor)
         return turnover_rotors
 
     def flow_through(self, letter):

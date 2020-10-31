@@ -1,11 +1,11 @@
 from unittest import TestCase
-from utils import Enigma, Settings, Data
+from utils import Enigma, Settings, EnigmaMachineData
 
 
 class Test_Enigma(TestCase):
 
     def setUp(self):
-        self.data_obj = Data()
+        self.data_obj = EnigmaMachineData()
         self.data_obj.set_machine("example_machine")
         self.settings = Settings()
         self.I = self.data_obj.get_rotor("i")
@@ -96,7 +96,7 @@ class Test_Enigma(TestCase):
 
     def test_m4_Beta_I_II_III_B_Thin_AQEU(self):
         settings = Settings()
-        data = Data()
+        data = EnigmaMachineData()
         data.set_machine("m4")
         beta = data.get_rotor("beta")
         i = data.get_rotor("i")
@@ -112,7 +112,7 @@ class Test_Enigma(TestCase):
 
     def test_m4_Beta_I_II_III_B_Thin_AQEV(self):
         settings = Settings()
-        data = Data()
+        data = EnigmaMachineData()
         data.set_machine("m4")
         beta = data.get_rotor("beta")
         i = data.get_rotor("i")
@@ -128,7 +128,7 @@ class Test_Enigma(TestCase):
 
     def test_IV_V_Beta_I_A_EZGP_18_24_03_05(self):
         settings = Settings()
-        data = Data()
+        data = EnigmaMachineData()
         data.set_machine("example_machine")
         iv = data.get_rotor("iv")
         v = data.get_rotor("v")
@@ -148,7 +148,7 @@ class Test_Enigma(TestCase):
 
     def test_B_II_IV_Beta_Gamma_4_24_17_7(self):
         settings = Settings()
-        data = Data()
+        data = EnigmaMachineData()
         data.set_machine("example_machine")
         ii = data.get_rotor("ii")
         iv = data.get_rotor("iv")

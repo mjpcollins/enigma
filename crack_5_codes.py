@@ -1,6 +1,7 @@
 from utils import EnigmaCracker, PossibleSettings
 import time
 
+
 def code_3():
     def odd_num_in_num(num):
         for number in str(num):
@@ -8,9 +9,6 @@ def code_3():
                 return True
         return False
     ring_sets = [num for num in range(1, 27) if not odd_num_in_num(num)]
-
-    with open("what.txt", "r") as F:
-        j = F.readlines()
 
     ps = PossibleSettings()
     ps.generate_entry_wheel_options()
@@ -21,14 +19,10 @@ def code_3():
     ps.generate_switchboard_options(['FH', 'TS', 'BE', 'UQ', 'KD', 'AL'])
     cracker = EnigmaCracker(possible_settings=ps,
                             starting_position="EMY")
+    run_crack(cracker=cracker,
+              code="ABSKJAKKMRITTNYURBJFWQGRSGNNYJSDRYLAPQWIAGKJYEPCTAGDCTHLCDRZRFZHKNRSDLNPFPEBVESHPY",
+              cribs=['THOUSANDS'])
 
-    t1 = time.time()
-    answer = cracker.crack_code(code="ABSKJAKKMRITTNYURBJFWQGRSGNNYJSDRYLAPQWIAGKJYEPCTAGDCTHLCDRZRFZHKNRSDLNPFPEBVESHPY",
-                                cribs=['THOUSAN'])
-    t2 = time.time()
-    print(t2 - t1)
-    print(answer)
-    print(answer['settings'].get_rotors_data())
 
 def code_4():
     ps = PossibleSettings()
@@ -40,17 +34,9 @@ def code_4():
     ps.generate_switchboard_options(['WP', 'RJ', 'A?', 'VF', 'I?', 'HN', "CG", "BS"])
     cracker = EnigmaCracker(possible_settings=ps,
                             starting_position="SWU")
-
-
-    t1 = time.time()
-    answer = cracker.crack_code(code="SDNTVTPHRBNWTLMZTQKZGADDQYPFNHBPNHCQGBGMZPZLUAVGDQVYRBFYYEIXQWVTHXGNW",
-                                cribs=['TUTOR'])
-    t2 = time.time()
-    print(t2 - t1)
-    for item in answer:
-        print(item['cracked_code'])
-        print(item['settings'].get_switchboard_data())
-        print("---")
+    run_crack(cracker=cracker,
+              code="SDNTVTPHRBNWTLMZTQKZGADDQYPFNHBPNHCQGBGMZPZLUAVGDQVYRBFYYEIXQWVTHXGNW",
+              cribs=['TUTOR'])
 
 
 def code_5():
@@ -63,17 +49,19 @@ def code_5():
     ps.generate_switchboard_options(['UG', 'IE', 'PO', 'NX', 'WT'])
     cracker = EnigmaCracker(possible_settings=ps,
                             starting_position="AJL")
+    run_crack(cracker=cracker,
+              code="HWREISXLGTTBYVXRCWWJAKZDTVZWKBDJPVQYNEQIOTIFX",
+              cribs=['INSTAGRAM'])
 
+
+def run_crack(cracker, cribs, code):
     t1 = time.time()
-    answer = cracker.crack_code(code="HWREISXLGTTBYVXRCWWJAKZDTVZWKBDJPVQYNEQIOTIFX",
-                                cribs=['INSTAGRAM'])
+    cracker.crack_code(code=code,
+                       cribs=cribs,
+                       multiprocess=True)
     t2 = time.time()
-    print(t2 - t1)
-    for item in answer:
-        print(item['cracked_code'])
-        print(item['settings'].get_switchboard_data())
-        print("---")
+    print(f"\nTime to crack: {t2 - t1} seconds")
 
 
 if __name__ == '__main__':
-    code_5()
+    code_4()

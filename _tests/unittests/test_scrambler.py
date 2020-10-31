@@ -1,5 +1,5 @@
 from unittest import TestCase
-from utils import Scrambler, Settings, Data
+from utils import Scrambler, Settings, EnigmaMachineData
 
 
 class Test_Scrambler(TestCase):
@@ -8,7 +8,7 @@ class Test_Scrambler(TestCase):
         settings = Settings()
         settings_4th_rotor = Settings()
 
-        self.data = Data()
+        self.data = EnigmaMachineData()
         self.data.set_machine("example_machine")
         self.gamma = self.data.get_rotor("gamma")
         self.i = self.data.get_rotor("i")
@@ -107,10 +107,6 @@ class Test_Scrambler(TestCase):
         self.assertEqual("G", self.scrambler._rotors[1].get_current_position())
         self.assertEqual("N", self.scrambler._rotors[2].get_current_position())
 
-    def test_find_fourth_rotor(self):
-        self.assertEqual(None, self.scrambler._find_fourth_rotor())
-        self.assertEqual("FSOKANUERHMBTIYCWLQPZXVGJD", self.scrambler_with_fourth_rotor._find_fourth_rotor()._letters)
-
     def test_remove_fourth_rotor(self):
         rotors_selected = set(self.scrambler_with_fourth_rotor._rotors[0:])
         expected = set(self.scrambler_with_fourth_rotor._rotors[0:3])
@@ -127,35 +123,39 @@ class Test_Scrambler(TestCase):
         self.assertEqual("R", self.scrambler_with_fourth_rotor._rotors[2].get_current_position())
         self.assertEqual("A", self.scrambler_with_fourth_rotor._rotors[3].get_current_position())
 
-    def assert_rotor_1_and_2_selected(self, wheels):
-        self.assertEqual(2, len(wheels))
+    def assert_rotor_1_and_2_selected(self, rotors):
+        self.assertEqual(2, len(rotors))
+        rotors_list = list(rotors)
+        rotors_list.sort()
 
-        self.assertEqual("BDFHJLCPRTXVZNYEIWGAKMUSQO", wheels[0]._letters)
-        self.assertEqual("B", wheels[0]._starting_pos)
-        self.assertEqual("V", wheels[0]._turnover)
+        self.assertEqual("BDFHJLCPRTXVZNYEIWGAKMUSQO", rotors_list[0]._letters)
+        self.assertEqual("B", rotors_list[0]._starting_pos)
+        self.assertEqual("V", rotors_list[0]._turnover)
 
-        self.assertEqual("AJDKSIRUXBLHWTMCQGZNPYFVOE", wheels[1]._letters)
-        self.assertEqual("A", wheels[1]._starting_pos)
-        self.assertEqual("E", wheels[1]._turnover)
+        self.assertEqual("AJDKSIRUXBLHWTMCQGZNPYFVOE", rotors_list[1]._letters)
+        self.assertEqual("A", rotors_list[1]._starting_pos)
+        self.assertEqual("E", rotors_list[1]._turnover)
 
-    def assert_all_rotors_selected(self, wheels):
-        self.assertEqual(3, len(wheels))
+    def assert_all_rotors_selected(self, rotors):
+        self.assertEqual(3, len(rotors))
+        rotors_list = list(rotors)
+        rotors_list.sort()
 
-        self.assertEqual("BDFHJLCPRTXVZNYEIWGAKMUSQO", wheels[0]._letters)
-        self.assertEqual("B", wheels[0]._starting_pos)
-        self.assertEqual("V", wheels[0]._turnover)
+        self.assertEqual("BDFHJLCPRTXVZNYEIWGAKMUSQO", rotors_list[0]._letters)
+        self.assertEqual("B", rotors_list[0]._starting_pos)
+        self.assertEqual("V", rotors_list[0]._turnover)
 
-        self.assertEqual("AJDKSIRUXBLHWTMCQGZNPYFVOE", wheels[1]._letters)
-        self.assertEqual("A", wheels[1]._starting_pos)
-        self.assertEqual("E", wheels[1]._turnover)
+        self.assertEqual("AJDKSIRUXBLHWTMCQGZNPYFVOE", rotors_list[1]._letters)
+        self.assertEqual("A", rotors_list[1]._starting_pos)
+        self.assertEqual("E", rotors_list[1]._turnover)
 
-        self.assertEqual("EKMFLGDQVZNTOWYHXUSPAIBRCJ", wheels[2]._letters)
-        self.assertEqual("B", wheels[0]._starting_pos)
-        self.assertEqual("V", wheels[0]._turnover)
+        self.assertEqual("EKMFLGDQVZNTOWYHXUSPAIBRCJ", rotors_list[2]._letters)
+        self.assertEqual("B", rotors_list[0]._starting_pos)
+        self.assertEqual("V", rotors_list[0]._turnover)
 
     def test_non_notch_rotor_preventing_rotations(self):
         settings = Settings()
-        data = Data()
+        data = EnigmaMachineData()
         data.set_machine("example_machine")
 
         iv = data.get_rotor("iv")

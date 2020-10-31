@@ -10,45 +10,46 @@ class EnigmaCracker:
         self._code = ""
         self._cribs = []
         self._possible_settings = possible_settings.get_settings()
-        self._starting_position = starting_position
+        self._set_starting_positions(starting_position)
 
     def crack_code(self, code, cribs, multiprocess=False):
         self._code = code
         self._cribs = cribs
-        if self._starting_position:
-            self._possible_settings['rotor_1']['start_positions'] = self._starting_position[0]
-            self._possible_settings['rotor_2']['start_positions'] = self._starting_position[1]
-            self._possible_settings['rotor_3']['start_positions'] = self._starting_position[2]
         if multiprocess:
-            return [data for data in self._find_settings_brute_force_multiprocess()]
-        return [data for data in self._find_settings_brute_force()]
+            found_settings = self._find_settings_brute_force_multiprocess()
+        else:
+            found_settings = self._find_settings_brute_force()
+        return [settings_data for settings_data in found_settings if settings_data]
 
-    def _find_settings_brute_force(self):
-        for crib in self._cribs:
-            for settings in self._create_settings_generator_object():
-                yield self._try_these_settings({'crib': crib, 'settings': settings, 'code': self._code})
-        return None
+    def _set_starting_positions(self, starting_position):
+        for idx, position in enumerate(starting_position):
+            self._possible_settings[f'rotor_{idx + 1}']['start_positions'] = position
 
     def _find_settings_brute_force_multiprocess(self):
-        data = self._multiprocessing_data_generator()
         pool = Pool()
-        result = pool.map(self._try_these_settings, data)
+        result = pool.map(func=self._try_these_settings,
+                          iterable=self._data_generator())
         pool.close()
         return result
 
-    def _multiprocessing_data_generator(self):
+    def _find_settings_brute_force(self):
+        for settings in self._data_generator():
+            yield self._try_these_settings(settings)
+
+    def _data_generator(self):
         for crib in self._cribs:
-            for settings in self._create_settings_generator_object():
+            for settings in self._settings_generator():
                 yield {'crib': crib, 'settings': settings, 'code': self._code}
 
     @staticmethod
     def _try_these_settings(data):
-        cracked_code = Enigma(settings=data['settings']).parse(data['code'])
+        enigma = Enigma(settings=data['settings'], error_checks=False)
+        cracked_code = enigma.parse(data['code'])
         if data['crib'] in cracked_code:
-            print(data['settings'].get_reflector_data(), data['crib'], cracked_code)
-            return {'settings': data['settings'], 'crib': data['crib'], 'cracked_code': cracked_code}
+            print({'cracked_code': cracked_code, 'crib': data['crib'], 'settings': str(data['settings'])})
+            return {'cracked_code': cracked_code, 'crib': data['crib'], 'settings': data['settings']}
 
-    def _create_settings_generator_object(self):
+    def _settings_generator(self):
         for entry_wheel in self._possible_settings['entry_wheels']:
             for pairs in self._possible_settings['switchboards']:
                 for rotors in self._create_rotor_settings_generator_object():
@@ -61,17 +62,14 @@ class EnigmaCracker:
                         yield settings
 
     def _create_rotor_settings_generator_object(self):
-        rotor_settings = [self._possible_settings['rotor_1'],
-                          self._possible_settings['rotor_2'],
-                          self._possible_settings['rotor_3'],
-                          self._possible_settings['rotor_4']]
-        slots = [self._create_rotor_slot_generator(rotor_slot) for rotor_slot in rotor_settings if rotor_slot]
+        rotor_settings = [self._possible_settings[key] for key in self._possible_settings if "rotor_" in key]
+        slots = [self._rotor_slot_generator(rotor_slot) for rotor_slot in rotor_settings]
         for rotors_combination in itertools.product(*slots):
             if self._distinct_rotors(rotors_combination):
                 yield rotors_combination
 
     @staticmethod
-    def _create_rotor_slot_generator(rotor_slot):
+    def _rotor_slot_generator(rotor_slot):
         for rotor_choice in rotor_slot['rotor_choices']:
             for ring_setting in rotor_slot['ring_settings']:
                 for start_position in rotor_slot['start_positions']:
@@ -82,8 +80,5 @@ class EnigmaCracker:
 
     @staticmethod
     def _distinct_rotors(rotor_combinations):
-        r1_letters = rotor_combinations[0]['letters']
-        r2_letters = rotor_combinations[1]['letters']
-        r3_letters = rotor_combinations[2]['letters']
-        letters_set = {r1_letters, r2_letters, r3_letters}
-        return len(letters_set) == len(rotor_combinations)
+        rotor_letters_set = {rc['letters'] for rc in rotor_combinations}
+        return len(rotor_letters_set) == len(rotor_combinations)

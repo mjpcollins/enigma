@@ -1,11 +1,11 @@
 from unittest import TestCase
-from utils import Data
+from utils import EnigmaMachineData
 
 
-class Test_Data(TestCase):
+class Test_EnigmaMachineData(TestCase):
 
     def setUp(self):
-        self.data = Data()
+        self.data = EnigmaMachineData()
 
     def test_init(self):
         self.assertEqual("./data/rotors.json", self.data._filename)

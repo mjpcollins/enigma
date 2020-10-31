@@ -12,10 +12,6 @@ class Test_Misc(TestCase):
         self.assertEqual("A", number_to_alpha(0))
         self.assertEqual("J", number_to_alpha(9))
 
-    def test_shift_letter(self):
-        self.assertEqual("D", shift_letter("A", 3))
-        self.assertEqual("B", shift_letter("Z", 2))
-
     def test_letter_to_prime(self):
         self.assertEqual(2, letter_to_prime("A"))
         self.assertEqual(61, letter_to_prime("R"))
