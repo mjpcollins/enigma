@@ -1,4 +1,3 @@
-from string import ascii_uppercase
 
 
 class Settings:
@@ -6,7 +5,7 @@ class Settings:
     def __init__(self):
         self._reflector_data = {}
         self._rotors_data = list()
-        self._entry_wheel_data = {"letters": ascii_uppercase}
+        self._entry_wheel_data = {"letters": ""}
         self._switchboard_data = {"pairs": list()}
 
     def __str__(self):
@@ -35,7 +34,7 @@ class Settings:
     def set_rotor_start_position(self, rotor_position, start_position):
         self._rotors_data[rotor_position]['start_position'] = start_position
 
-    def set_entry_wheel(self, letters=ascii_uppercase):
+    def set_entry_wheel(self, letters):
         self._entry_wheel_data = {"letters": letters}
 
     def set_switchboard_pairs(self, pairs):

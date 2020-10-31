@@ -1,4 +1,5 @@
 import itertools
+from string import ascii_uppercase
 from utils.settings import Settings
 from utils.enigma import Enigma
 from multiprocessing import Pool
@@ -13,6 +14,7 @@ class EnigmaCracker:
         self._set_starting_positions(starting_position)
 
     def crack_code(self, code, cribs, multiprocess=False):
+        self._input_checks(code, cribs)
         self._code = code
         self._cribs = cribs
         if multiprocess:
@@ -43,7 +45,7 @@ class EnigmaCracker:
 
     @staticmethod
     def _try_these_settings(data):
-        enigma = Enigma(settings=data['settings'], error_checks=False)
+        enigma = Enigma(settings=data['settings'], error_checks=False, correct_case=False)
         cracked_code = enigma.parse(data['code'])
         if data['crib'] in cracked_code:
             print({'cracked_code': cracked_code, 'crib': data['crib'], 'settings': str(data['settings'])})
@@ -82,3 +84,30 @@ class EnigmaCracker:
     def _distinct_rotors(rotor_combinations):
         rotor_letters_set = {rc['letters'] for rc in rotor_combinations}
         return len(rotor_letters_set) == len(rotor_combinations)
+
+    def _input_checks(self, code, cribs):
+        self._test_input(code)
+        try:
+            assert type(cribs) is list
+        except AssertionError:
+            raise ValueError("Please give input cribs as as list")
+        try:
+            assert len(cribs)
+        except AssertionError:
+            raise ValueError("Please input at least one crib")
+        for crib in cribs:
+            self._test_input(crib)
+
+    @staticmethod
+    def _test_input(input_text):
+        try:
+            assert type(input_text) == str
+            for letter in input_text:
+                try:
+                    assert letter.upper() in ascii_uppercase
+                except AssertionError:
+                    raise SyntaxError("Please ensure input only contains all upper case alphabet characters, no spaces")
+
+        except AssertionError:
+            raise TypeError(f"{type(input_text)} is not a valid code or crib type. Please try a string.")
+        return True

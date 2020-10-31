@@ -66,7 +66,8 @@ class Test_EnigmaCracker(TestCase):
                                     cribs=['SECRETS'])
         self.assertEqual("NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING",
                          answer[0]['cracked_code'])
-        self.assertEqual("{'letters': 'FVPJIAOYEDRZXWGCTKUQSBNMHL'} SECRETS NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING\n",
+        cracked_text = str({'cracked_code': 'NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING', 'crib': 'SECRETS', 'settings': "{'settings': {'reflector': 'FVPJIAOYEDRZXWGCTKUQSBNMHL', 'entry_wheel': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'switchboard': ['KI', 'XN', 'FL'], 'rotors': [{'letters': 'LEYJVCNIXWPBQMDRTAKZGFUHOS', 'start_position': 'M', 'turnover': '', 'position': 1, 'ring_setting': 3}, {'letters': 'FSOKANUERHMBTIYCWLQPZXVGJD', 'start_position': 'J', 'turnover': '', 'position': 2, 'ring_setting': 1}, {'letters': 'VZBRGITYUPSDNHLXAWMJQOFECK', 'start_position': 'M', 'turnover': 'Z', 'position': 3, 'ring_setting': 13}]}}"})
+        self.assertEqual(cracked_text + "\n",
                          mock_stdout.getvalue())
 
     @mock.patch('sys.stdout', new_callable=io.StringIO)  # Silencing the print statement
@@ -76,3 +77,24 @@ class Test_EnigmaCracker(TestCase):
                                            multiprocess=True)
         self.assertEqual("NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING",
                          answer[0]['cracked_code'])
+
+    def test_input_message_error_checks(self):
+        with self.assertRaises(TypeError):
+            self.cracker_c.crack_code(code=13,
+                                      cribs=['SEC'])
+
+        with self.assertRaises(SyntaxError):
+            self.cracker_c.crack_code(code="A123",
+                                      cribs=['SECRETS'])
+
+        with self.assertRaises(SyntaxError):
+            self.cracker_c.crack_code(code="DMEXBMKYCVPNQBEDHXVPZGKMTFFBJRPJTLHLCHOTKOYXGGHZ",
+                                      cribs=['1'])
+
+        with self.assertRaises(ValueError):
+            self.cracker_c.crack_code(code="DMEXBMKYCVPNQBEDHXVPZGKMTFFBJRPJTLHLCHOTKOYXGGHZ",
+                                      cribs=[])
+
+        with self.assertRaises(ValueError):
+            self.cracker_c.crack_code(code="DMEXBMKYCVPNQBEDHXVPZGKMTFFBJRPJTLHLCHOTKOYXGGHZ",
+                                      cribs=321)

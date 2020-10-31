@@ -103,5 +103,114 @@
         "letters": "RDOBJNTKVEHMLFCWZAXGYIPSUQ"
       }
     }
+  },
+  "m3": {
+    "entry_wheel": {
+      "etw": {
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    "rotor": {
+      "i": {
+        "letters": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+        "turnover": "Q"
+      },
+      "ii": {
+        "letters": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+        "turnover": "E"
+      },
+      "iii": {
+        "letters": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+        "turnover": "V"
+      },
+      "iv": {
+        "letters": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+        "turnover": "J"
+      },
+      "v": {
+        "letters": "VZBRGITYUPSDNHLXAWMJQOFECK",
+        "turnover": "Z"
+      },
+      "vi": {
+        "letters": "JPGVOUMFYQBENHZRDKASXLICTW",
+        "turnover": "ZM"
+      },
+      "vii": {
+        "letters": "NZJHGRCXMYSWBOUFAIVLPEKQDT",
+        "turnover": "ZM"
+      },
+      "viii": {
+        "letters": "FKQHTLXOCBJSPDZRAMEWNIUYGV",
+        "turnover": "ZM"
+      }
+    },
+    "reflector": {
+      "b": {
+        "letters": "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+      },
+      "c": {
+        "letters": "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+      }
+    }
+  },
+  "norenigma": {
+    "entry_wheel": {
+      "etw": {
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    "rotor": {
+      "i": {
+        "letters": "WTOKASUYVRBXJHQCPZEFMDINLG",
+        "turnover": "Q"
+      },
+      "ii": {
+        "letters": "GJLPUBSWEMCTQVHXAOFZDRKYNI",
+        "turnover": "E"
+      },
+      "iii": {
+        "letters": "JWFMHNBPUSDYTIXVZGRQLAOEKC",
+        "turnover": "V"
+      },
+      "iv": {
+        "letters": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+        "turnover": "J"
+      },
+      "v": {
+        "letters": "HEJXQOTZBVFDASCILWPGYNMURK",
+        "turnover": "Z"
+      }
+    },
+    "reflector": {
+      "ukw": {
+        "letters": "MOWJYPUXNDSRAIBFVLKZGQCHET"
+      }
+    }
+  },
+  "sondermaschine": {
+    "entry_wheel": {
+      "etw": {
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      }
+    },
+    "rotor": {
+      "i": {
+        "letters": "VEOSIRZUJDQCKGWYPNXAFLTHMB",
+        "turnover": "Q"
+      },
+      "ii": {
+        "letters": "UEMOATQLSHPKCYFWJZBGVXINDR",
+        "turnover": "E"
+      },
+      "iii": {
+        "letters": "TZHXMBSIPNURJFDKEQVCWGLAOY",
+        "turnover": "V"
+      }
+    },
+    "reflector": {
+      "ukw": {
+        "letters": "CIAGSNDRBYTPZFULVHEKOQXWJM"
+      }
+    }
   }
 }

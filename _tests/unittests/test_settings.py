@@ -10,7 +10,7 @@ class Test_Settings(TestCase):
     def test_init(self):
         self.assertDictEqual({}, self.settings._reflector_data)
         self.assertListEqual([], self.settings._rotors_data)
-        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
+        self.assertDictEqual({"letters": ""}, self.settings._entry_wheel_data)
         self.assertDictEqual({"pairs": []}, self.settings._switchboard_data)
 
     def test_set_reflector(self):
@@ -38,7 +38,7 @@ class Test_Settings(TestCase):
                              self.settings._rotors_data)
 
     def test_set_entry_wheel(self):
-        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings._entry_wheel_data)
+        self.assertDictEqual({"letters": ""}, self.settings._entry_wheel_data)
         self.settings.set_entry_wheel("YFQWKIATGLORSJCDEMUXPNVZBH")
         self.assertDictEqual({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}, self.settings._entry_wheel_data)
 
@@ -74,7 +74,7 @@ class Test_Settings(TestCase):
         self.assertDictEqual({"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ"}, self.settings.get_reflector_data())
 
     def test_get_entry_wheel_data(self):
-        self.assertDictEqual({"letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, self.settings.get_entry_wheel_data())
+        self.assertDictEqual({"letters": ""}, self.settings.get_entry_wheel_data())
         self.settings._entry_wheel_data = {"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}
         self.assertDictEqual({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}, self.settings.get_entry_wheel_data())
 
@@ -104,5 +104,5 @@ class Test_Settings(TestCase):
                                 position=3)
         self.assertEqual("G", self.settings._rotors_data[0]['start_position'])
         self.settings.set_rotor_start_position(0, "K")
-        self.assertEqual(str({'settings': {'reflector': None, 'entry_wheel': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'switchboard': [], 'rotors': [{'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'K', 'turnover': 'AM', 'position': 0, 'ring_setting': 0}, {'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'G', 'turnover': 'AM', 'position': 3, 'ring_setting': 0}]}}),
+        self.assertEqual(str({'settings': {'reflector': None, 'entry_wheel': '', 'switchboard': [], 'rotors': [{'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'K', 'turnover': 'AM', 'position': 0, 'ring_setting': 0}, {'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'G', 'turnover': 'AM', 'position': 3, 'ring_setting': 0}]}}),
                          str(self.settings))
