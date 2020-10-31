@@ -1,4 +1,3 @@
-from _tests.unittests.test_crib_finder import Test_CribFinder
 from _tests.unittests.test_enigma import Test_Enigma
 from _tests.unittests.test_enigma_cracker import Test_EnigmaCracker
 from _tests.unittests.test_enigma_machine_data import Test_EnigmaMachineData

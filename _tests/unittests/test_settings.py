@@ -15,7 +15,7 @@ class Test_Settings(TestCase):
 
     def test_set_reflector(self):
         self.assertDictEqual({}, self.settings._reflector_data)
-        self.settings.set_reflector("CDEMUXPNVZBHYFQWKIATGLORSJ")
+        self.settings.add_reflector({"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ"})
         self.assertDictEqual({"letters": "CDEMUXPNVZBHYFQWKIATGLORSJ"}, self.settings._reflector_data)
 
     def test_add_wheel(self):
@@ -39,7 +39,7 @@ class Test_Settings(TestCase):
 
     def test_set_entry_wheel(self):
         self.assertDictEqual({"letters": ""}, self.settings._entry_wheel_data)
-        self.settings.set_entry_wheel("YFQWKIATGLORSJCDEMUXPNVZBH")
+        self.settings.add_entry_wheel({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"})
         self.assertDictEqual({"letters": "YFQWKIATGLORSJCDEMUXPNVZBH"}, self.settings._entry_wheel_data)
 
     def test_set_switchboard_pairs(self):

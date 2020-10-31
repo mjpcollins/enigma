@@ -2,6 +2,35 @@ from utils import EnigmaCracker, PossibleSettings
 import time
 
 
+def code_1():
+    ps = PossibleSettings()
+    ps.generate_entry_wheel_options()
+    ps.generate_rotor_1_options(rotors=["beta"], ring_settings=[4])
+    ps.generate_rotor_2_options(rotors=["gamma"], ring_settings=[2])
+    ps.generate_rotor_3_options(rotors=["v"], ring_settings=[14])
+    ps.generate_reflector_options()
+    ps.generate_switchboard_options(['KI', 'XN', 'FL'])
+    cracker = EnigmaCracker(possible_settings=ps,
+                            starting_position="MJM")
+    run_crack(cracker=cracker,
+              code="DMEXBMKYCVPNQBEDHXVPZGKMTFFBJRPJTLHLCHOTKOYXGGHZ",
+              cribs=['SECRETS'])
+
+
+def code_2():
+    ps = PossibleSettings()
+    ps.generate_entry_wheel_options()
+    ps.generate_rotor_1_options(rotors=["beta"], ring_settings=[23])
+    ps.generate_rotor_2_options(rotors=["i"], ring_settings=[2])
+    ps.generate_rotor_3_options(rotors=["iii"], ring_settings=[10])
+    ps.generate_reflector_options()
+    ps.generate_switchboard_options(['VH', 'PT', 'ZG', 'BJ', 'EY', 'FS'])
+    cracker = EnigmaCracker(possible_settings=ps)
+    run_crack(cracker=cracker,
+              code="CMFSUPKNCBMUYEQVVDYKLRQZTPUFHSWWAKTUGXMPAMYAFITXIJKMH",
+              cribs=['UNIVERSITY'])
+
+
 def code_3():
     def odd_num_in_num(num):
         for number in str(num):
@@ -64,4 +93,4 @@ def run_crack(cracker, cribs, code):
 
 
 if __name__ == '__main__':
-    code_4()
+    code_2()

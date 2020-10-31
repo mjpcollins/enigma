@@ -15,8 +15,8 @@ class Settings:
                                       "rotors": self._rotors_data}}
         return str(settings_dict)
 
-    def set_reflector(self, letters):
-        self._reflector_data = {"letters": letters}
+    def add_reflector(self, reflector_data):
+        self._reflector_data = reflector_data
 
     def add_rotors(self, list_of_rotors):
         for rotor in list_of_rotors:
@@ -34,8 +34,8 @@ class Settings:
     def set_rotor_start_position(self, rotor_position, start_position):
         self._rotors_data[rotor_position]['start_position'] = start_position
 
-    def set_entry_wheel(self, letters):
-        self._entry_wheel_data = {"letters": letters}
+    def add_entry_wheel(self, etw_data):
+        self._entry_wheel_data = etw_data
 
     def set_switchboard_pairs(self, pairs):
         self._switchboard_data = {"pairs": pairs}

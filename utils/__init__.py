@@ -1,4 +1,3 @@
-from utils.crib_finder import CribFinder
 from utils.enigma import Enigma
 from utils.enigma_cracker import EnigmaCracker
 from utils.enigma_machine_data import EnigmaMachineData

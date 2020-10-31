@@ -15,7 +15,6 @@ class TestSuiteLoader:
         self._add_all_tests_to_test_suite()
 
     def _add_tests(self):
-        self._add_test_to_list_of_tests(Test_CribFinder)
         self._add_test_to_list_of_tests(Test_Enigma)
         self._add_test_to_list_of_tests(Test_EnigmaCracker)
         self._add_test_to_list_of_tests(Test_EnigmaMachineData)

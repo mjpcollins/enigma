@@ -19,14 +19,14 @@ class Test_Scrambler(TestCase):
         self.ii.update({"start_position": "A", "position": 3})
         self.iii.update({"start_position": "B", "position": 4})
 
-        settings.set_entry_wheel(**self.data.get_entry_wheel("etw"))
-        settings.set_reflector(**self.data.get_reflector("b"))
+        settings.add_entry_wheel(self.data.get_entry_wheel("etw"))
+        settings.add_reflector(self.data.get_reflector("b"))
         settings.add_rotors([self.i, self.ii, self.iii])
         self.scrambler = Scrambler(settings=settings)
 
-        settings_4th_rotor.set_entry_wheel(**self.data.get_entry_wheel("etw"))
+        settings_4th_rotor.add_entry_wheel(self.data.get_entry_wheel("etw"))
         settings_4th_rotor.add_rotors([self.i, self.ii, self.iii, self.gamma])
-        settings_4th_rotor.set_reflector(**self.data.get_reflector("b"))
+        settings_4th_rotor.add_reflector(self.data.get_reflector("b"))
         self.scrambler_with_fourth_rotor = Scrambler(settings=settings_4th_rotor)
 
     def test_flow_through(self):
@@ -171,7 +171,7 @@ class Test_Scrambler(TestCase):
         i.update({"start_position": "P", "ring_setting": 5, "position": 4})
 
         settings.add_rotors([iv, v, beta, i])
-        settings.set_reflector(**data.get_reflector("a"))
+        settings.add_reflector(data.get_reflector("a"))
 
         scrambler = Scrambler(settings=settings)
         self.assertEqual("E", scrambler._rotors[3].get_current_position())

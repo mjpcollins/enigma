@@ -57,9 +57,9 @@ class EnigmaCracker:
                 for rotors in self._create_rotor_settings_generator_object():
                     for reflector in self._possible_settings['reflectors']:
                         settings = Settings()
-                        settings.set_entry_wheel(**entry_wheel)
+                        settings.add_entry_wheel(entry_wheel)
                         settings.add_rotors(rotors)
-                        settings.set_reflector(**reflector)
+                        settings.add_reflector(reflector)
                         settings.set_switchboard_pairs(pairs)
                         yield settings
 
