@@ -62,3 +62,18 @@ class Test_EnigmaCracker(TestCase):
         self.assertEqual("NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING",
                          answer[0]['cracked_code'])
 
+    def test_crack_code_mp(self):
+        ps = PossibleSettings()
+        ps.generate_entry_wheel_options()
+        ps.generate_rotor_1_options(rotors=["beta"], ring_settings=[4])
+        ps.generate_rotor_2_options(rotors=["gamma"], ring_settings=[2])
+        ps.generate_rotor_3_options(rotors=["v"], ring_settings=[14])
+        ps.generate_reflector_options('c')
+        ps.generate_switchboard_options(['KI', 'XN', 'FL'])
+        cracker = EnigmaCracker(possible_settings=ps,
+                                starting_position="MJM")
+        answer = cracker.crack_code(code="DMEXBMKYCVPNQBEDHXVPZGKMTFFBJRPJTLHLCHOTKOYXGGHZ",
+                                    cribs=['SECRETS'],
+                                    multiprocess=True)
+        self.assertEqual("NICEWORKYOUVEMANAGEDTODECODETHEFIRSTSECRETSTRING",
+                         answer[0]['cracked_code'])

@@ -1,7 +1,7 @@
 import itertools
 from string import ascii_uppercase
 from utils.data import Data
-from utils.misc import number_to_alpha, alpha_to_number
+from utils.misc import letter_to_prime, alpha_to_number
 from utils.reflector import Reflector
 
 
@@ -74,12 +74,15 @@ class PossibleSettings:
         if reflectors is None:
             reflectors = self._data.list_reflectors()
         custom_reflectors = []
+        reflector_letters_set = set()
         for reflector in reflectors:
             for custom_wiring in self._generate_custom_wiring_options(alterations=alterations):
                 custom_reflector = self._swap_reflector_wires(reflector_settings=self._data.get_reflector(reflector),
                                                               swap_letters=custom_wiring)
                 if custom_reflector:
-                    custom_reflectors.append(custom_reflector)
+                    if custom_reflector['letters'] not in reflector_letters_set:
+                        custom_reflectors.append(custom_reflector)
+                        reflector_letters_set.add(custom_reflector['letters'])
         print(f"Set up for {len(custom_reflectors)} reflector combinations!")
         self._possible_settings['reflectors'] = custom_reflectors
 
@@ -155,15 +158,36 @@ class PossibleSettings:
         temp_reflector_settings['letters'] = "".join(ref_letters)
         return temp_reflector_settings
 
-    @staticmethod
-    def _generate_custom_wiring_options(alterations):
+    def _generate_custom_wiring_options(self, alterations):
         all_combos = []
         res = []
+        combination_set = set()
         combinations = list(itertools.combinations(ascii_uppercase, 2))
         for _ in range(alterations):
             all_combos.append(["".join(combo) for combo in combinations if combo[0] != combo[1]])
         for item in itertools.product(*all_combos):
             combos = "".join(item)
-            if len(combos) == len(set(combos)):
+            if self._combos_are_unique_wire_swaps(combos) and self._combos_not_in_set(combos, combination_set):
                 res.append(combos)
         return res
+
+    @staticmethod
+    def _combos_are_unique_wire_swaps(combination):
+        return len(combination) == len(set(combination))
+
+    @staticmethod
+    def _combos_not_in_set(combination, set_of_combinations):
+        total = list()
+        previous = 0
+        for idx, letter in enumerate(combination):
+            prime_of_letter = letter_to_prime(letter=letter)
+            if idx % 2 == 0:
+                previous = prime_of_letter
+            else:
+                total.append(previous * prime_of_letter)
+                previous = 0
+        total.sort()
+        if str(total) in set_of_combinations:
+            return False
+        set_of_combinations.add(str(total))
+        return True

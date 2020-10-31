@@ -22,8 +22,6 @@ def code_3():
     cracker = EnigmaCracker(possible_settings=ps,
                             starting_position="EMY")
 
-    s = "183.63860297203064"
-    BRUTEFORCETIME = "97.67955613136292"
     t1 = time.time()
     answer = cracker.crack_code(code="ABSKJAKKMRITTNYURBJFWQGRSGNNYJSDRYLAPQWIAGKJYEPCTAGDCTHLCDRZRFZHKNRSDLNPFPEBVESHPY",
                                 cribs=['THOUSAN'])
@@ -68,13 +66,14 @@ def code_5():
 
     t1 = time.time()
     answer = cracker.crack_code(code="HWREISXLGTTBYVXRCWWJAKZDTVZWKBDJPVQYNEQIOTIFX",
-                                cribs=['INSTAGRAM', 'TUMBLR', 'REDDIT', 'LINKEDIN', 'SNAPCHAT', 'TIKTOK'])
+                                cribs=['INSTAGRAM'])
     t2 = time.time()
     print(t2 - t1)
     for item in answer:
         print(item['cracked_code'])
         print(item['settings'].get_switchboard_data())
         print("---")
+
 
 if __name__ == '__main__':
     code_5()

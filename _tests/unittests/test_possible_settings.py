@@ -138,7 +138,7 @@ class Test_PossibleSettings(TestCase):
         self.assertEqual('AV', self.ps._generate_custom_wiring_options(1)[20])
 
     def test_generate_custom_wiring_options_2_alterations(self):
-        self.assertEqual(89700, len(self.ps._generate_custom_wiring_options(2)))
+        self.assertEqual(44850, len(self.ps._generate_custom_wiring_options(2)))
         self.assertEqual('ABCD', self.ps._generate_custom_wiring_options(2)[0])
         self.assertEqual('ABCX', self.ps._generate_custom_wiring_options(2)[20])
 
@@ -156,13 +156,39 @@ class Test_PossibleSettings(TestCase):
     def test_generate_custom_reflector_options(self):
         self.ps.set_machine("example_machine")
         self.ps.generate_custom_reflector_options(reflectors='a', alterations=1)
-        self.assertEqual(312, len(self.ps._possible_settings['reflectors']))
+        self.assertEqual(156, len(self.ps._possible_settings['reflectors']))
         self.assertEqual({'letters': 'KJMZWLYXVBAFCRQUONTSPIEHGD'}, self.ps._possible_settings['reflectors'][20])
         self.assertEqual({'letters': 'JEMZBLYXVAWFCRQUONTSPIKHGD'}, self.ps._possible_settings['reflectors'][0])
 
     def test_generate_custom_reflector_options_2_alterations(self):
         self.ps.set_machine("example_machine")
         self.ps.generate_custom_reflector_options(reflectors='a', alterations=2)
-        self.assertEqual(82680, len(self.ps._possible_settings['reflectors']))
+        self.assertEqual(10869, len(self.ps._possible_settings['reflectors']))
         self.assertEqual({'letters': 'JEGZBLCXVAWFYRQUONTSPIKHMD'}, self.ps._possible_settings['reflectors'][20])
         self.assertEqual({'letters': 'JEZMBLYXVAWFDRQUONTSPIKHGC'}, self.ps._possible_settings['reflectors'][0])
+
+    def test_combos_not_in_set_false_1(self):
+        set_of_combos = {str([6, 77,  505])}
+        combos = 'ABZCDE'
+        self.assertEqual(False, self.ps._combos_not_in_set(combination=combos,
+                                                           set_of_combinations=set_of_combos))
+        self.assertSetEqual({str([6, 77,  505])}, set_of_combos)
+
+    def test_combos_not_in_set_false_2(self):
+        set_of_combos = {str([6, 77,  505])}
+        combos = 'ABDEZC'
+        self.assertEqual(False, self.ps._combos_not_in_set(combination=combos,
+                                                           set_of_combinations=set_of_combos))
+        self.assertSetEqual({str([6, 77,  505])}, set_of_combos)
+
+    def test_combos_not_in_set_true_1(self):
+        set_of_combos = {str([6, 77,  505])}
+        combos = 'AZBCDE'
+        self.assertEqual(True, self.ps._combos_not_in_set(combination=combos,
+                                                          set_of_combinations=set_of_combos))
+        self.assertSetEqual({str([6, 77, 505]), str([15, 77, 202])}, set_of_combos)
+
+    def test_combos_are_unique_wire_swaps(self):
+        self.assertEqual(False, self.ps._combos_are_unique_wire_swaps('AABB'))
+        self.assertEqual(True, self.ps._combos_are_unique_wire_swaps('ABCD'))
+        self.assertEqual(False, self.ps._combos_are_unique_wire_swaps('AA'))

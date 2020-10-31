@@ -1,6 +1,7 @@
 import itertools
 from utils.settings import Settings
 from utils.enigma import Enigma
+from multiprocessing import Pool
 
 
 class EnigmaCracker:
@@ -11,24 +12,41 @@ class EnigmaCracker:
         self._possible_settings = possible_settings.get_settings()
         self._starting_position = starting_position
 
-    def crack_code(self, code, cribs):
+    def crack_code(self, code, cribs, multiprocess=False):
         self._code = code
         self._cribs = cribs
+        if self._starting_position:
+            self._possible_settings['rotor_1']['start_positions'] = self._starting_position[0]
+            self._possible_settings['rotor_2']['start_positions'] = self._starting_position[1]
+            self._possible_settings['rotor_3']['start_positions'] = self._starting_position[2]
+        if multiprocess:
+            return [data for data in self._find_settings_brute_force_multiprocess()]
         return [data for data in self._find_settings_brute_force()]
 
     def _find_settings_brute_force(self):
         for crib in self._cribs:
-            if self._starting_position:
-                self._possible_settings['rotor_1']['start_positions'] = self._starting_position[0]
-                self._possible_settings['rotor_2']['start_positions'] = self._starting_position[1]
-                self._possible_settings['rotor_3']['start_positions'] = self._starting_position[2]
-            for idx, settings in enumerate(self._create_settings_generator_object()):
-                if idx % 10000 == 0: print(f"{idx} combinations checked")
-                cracked_code = Enigma(settings=settings).parse(self._code)
-                if crib in cracked_code:
-                    print(settings.get_reflector_data(), crib, cracked_code)
-                    yield {'settings': settings, 'crib': crib, 'cracked_code': cracked_code}
+            for settings in self._create_settings_generator_object():
+                yield self._try_these_settings({'crib': crib, 'settings': settings, 'code': self._code})
         return None
+
+    def _find_settings_brute_force_multiprocess(self):
+        data = self._multiprocessing_data_generator()
+        pool = Pool()
+        result = pool.map(self._try_these_settings, data)
+        pool.close()
+        return result
+
+    def _multiprocessing_data_generator(self):
+        for crib in self._cribs:
+            for settings in self._create_settings_generator_object():
+                yield {'crib': crib, 'settings': settings, 'code': self._code}
+
+    @staticmethod
+    def _try_these_settings(data):
+        cracked_code = Enigma(settings=data['settings']).parse(data['code'])
+        if data['crib'] in cracked_code:
+            print(data['settings'].get_reflector_data(), data['crib'], cracked_code)
+            return {'settings': data['settings'], 'crib': data['crib'], 'cracked_code': cracked_code}
 
     def _create_settings_generator_object(self):
         for entry_wheel in self._possible_settings['entry_wheels']:
