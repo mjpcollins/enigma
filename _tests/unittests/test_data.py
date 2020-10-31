@@ -43,7 +43,7 @@ class Test_Data(TestCase):
 
     def test_list_rotors(self):
         self.data._machine = "example_machine"
-        self.assertListEqual(["beta", "i", "ii", "iii", "iv", "gamma", "v"], self.data.list_rotors())
+        self.assertListEqual(["beta", "gamma", "i", "ii", "iii", "iv", "v"], self.data.list_rotors())
 
     def test_list_reflectors(self):
         self.data._machine = "example_machine"

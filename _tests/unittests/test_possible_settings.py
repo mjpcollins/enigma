@@ -1,5 +1,5 @@
 from unittest import TestCase
-from utils import PossibleSettings, Reflector, EntryWheel
+from utils import PossibleSettings, Data
 
 
 class Test_PossibleSettings(TestCase):
@@ -122,3 +122,47 @@ class Test_PossibleSettings(TestCase):
         expected_list = [['AB', 'ZR', 'XC'], ['AB', 'ZR', 'XD']]
         self.assertListEqual(expected_list, self.ps._remove_contradictions_from_switchboard(input_list))
 
+    def test_non_standard_reflector_generator(self):
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "EJMZALYXVBWFCRQUONTSPIKHGD"
+
+    def test_swap_one_rotor_wire(self):
+        reflector = Data(machine="example_machine").get_reflector("a")
+        swapped_reflector = self.ps._swap_one_reflector_wire(reflector, "AB")
+        self.assertEqual("EJMZALYXVBWFCRQUONTSPIKHGD", reflector['letters'])
+        self.assertEqual("JEMZBLYXVAWFCRQUONTSPIKHGD", swapped_reflector['letters'])
+
+    def test_generate_custom_wiring_options_1_alteration(self):
+        self.assertEqual(325, len(self.ps._generate_custom_wiring_options(1)))
+        self.assertEqual('AB', self.ps._generate_custom_wiring_options(1)[0])
+        self.assertEqual('AV', self.ps._generate_custom_wiring_options(1)[20])
+
+    def test_generate_custom_wiring_options_2_alterations(self):
+        self.assertEqual(89700, len(self.ps._generate_custom_wiring_options(2)))
+        self.assertEqual('ABCD', self.ps._generate_custom_wiring_options(2)[0])
+        self.assertEqual('ABCX', self.ps._generate_custom_wiring_options(2)[20])
+
+    def test_swap_reflector_wires(self):
+        reflector = Data(machine="example_machine").get_reflector("a")
+        swapped_reflector = self.ps._swap_reflector_wires(reflector, "ABCD")
+        self.assertEqual("EJMZALYXVBWFCRQUONTSPIKHGD", reflector['letters'])
+        self.assertEqual("JEZMBLYXVAWFDRQUONTSPIKHGC", swapped_reflector['letters'])
+
+    def test_swap_reflector_wires_not_possible(self):
+        reflector = Data(machine="example_machine").get_reflector("a")
+        swapped_reflector = self.ps._swap_reflector_wires(reflector, "EA")
+        self.assertEqual(None, swapped_reflector)
+
+    def test_generate_custom_reflector_options(self):
+        self.ps.set_machine("example_machine")
+        self.ps.generate_custom_reflector_options(reflectors='a', alterations=1)
+        self.assertEqual(312, len(self.ps._possible_settings['reflectors']))
+        self.assertEqual({'letters': 'KJMZWLYXVBAFCRQUONTSPIEHGD'}, self.ps._possible_settings['reflectors'][20])
+        self.assertEqual({'letters': 'JEMZBLYXVAWFCRQUONTSPIKHGD'}, self.ps._possible_settings['reflectors'][0])
+
+    def test_generate_custom_reflector_options_2_alterations(self):
+        self.ps.set_machine("example_machine")
+        self.ps.generate_custom_reflector_options(reflectors='a', alterations=2)
+        self.assertEqual(82680, len(self.ps._possible_settings['reflectors']))
+        self.assertEqual({'letters': 'JEGZBLCXVAWFYRQUONTSPIKHMD'}, self.ps._possible_settings['reflectors'][20])
+        self.assertEqual({'letters': 'JEZMBLYXVAWFDRQUONTSPIKHGC'}, self.ps._possible_settings['reflectors'][0])

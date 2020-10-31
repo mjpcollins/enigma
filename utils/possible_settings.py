@@ -1,6 +1,8 @@
 import itertools
 from string import ascii_uppercase
 from utils.data import Data
+from utils.misc import number_to_alpha, alpha_to_number
+from utils.reflector import Reflector
 
 
 class PossibleSettings:
@@ -53,7 +55,7 @@ class PossibleSettings:
 
         rotor_choices = list()
         for rotor in rotors:
-            rotor_data = self._data.get_rotor(rotor)
+            rotor_data = self._data.get_rotor(rotor).copy()
             rotor_data['position'] = machine_position
             rotor_choices.append(rotor_data)
 
@@ -67,6 +69,19 @@ class PossibleSettings:
             reflectors = self._data.list_reflectors()
         self._possible_settings['reflectors'] = [self._data.get_reflector(reflector)
                                                  for reflector in reflectors]
+
+    def generate_custom_reflector_options(self, reflectors=None, alterations=1):
+        if reflectors is None:
+            reflectors = self._data.list_reflectors()
+        custom_reflectors = []
+        for reflector in reflectors:
+            for custom_wiring in self._generate_custom_wiring_options(alterations=alterations):
+                custom_reflector = self._swap_reflector_wires(reflector_settings=self._data.get_reflector(reflector),
+                                                              swap_letters=custom_wiring)
+                if custom_reflector:
+                    custom_reflectors.append(custom_reflector)
+        print(f"Set up for {len(custom_reflectors)} reflector combinations!")
+        self._possible_settings['reflectors'] = custom_reflectors
 
     def generate_entry_wheel_options(self, entry_wheels=None):
         if entry_wheels is None:
@@ -110,3 +125,45 @@ class PossibleSettings:
             if len(set(all_letters)) == len(all_letters):
                 possible_switchboards.append(option)
         return possible_switchboards
+
+    def _swap_reflector_wires(self, reflector_settings, swap_letters):
+        for letter_idx in range(len(swap_letters)):
+            if letter_idx % 2 == 0:
+                swap = swap_letters[letter_idx] + swap_letters[letter_idx + 1]
+                reflector_settings = self._swap_one_reflector_wire(reflector_settings, swap)
+                if reflector_settings is None:
+                    return None
+        return reflector_settings
+
+    @staticmethod
+    def _swap_one_reflector_wire(reflector_settings, swap_letters):
+        ref_letters = list(reflector_settings['letters'])
+        temp_reflector_settings = reflector_settings.copy()
+        re = Reflector(**reflector_settings)
+        letter1 = swap_letters[0]
+        letter2 = swap_letters[1]
+        swap1_letter = re.forward_flow(swap_letters[0])
+        swap2_letter = re.forward_flow(swap_letters[1])
+        letter1_idx = alpha_to_number(letter1)
+        letter2_idx = alpha_to_number(letter2)
+        swap1_idx = alpha_to_number(swap1_letter)
+        swap2_idx = alpha_to_number(swap2_letter)
+        if len({letter1, letter2, swap1_letter, swap2_letter}) != 4:
+            return None
+        ref_letters[swap1_idx], ref_letters[swap2_idx] = ref_letters[swap2_idx], ref_letters[swap1_idx]
+        ref_letters[letter1_idx], ref_letters[letter2_idx] = ref_letters[letter2_idx], ref_letters[letter1_idx]
+        temp_reflector_settings['letters'] = "".join(ref_letters)
+        return temp_reflector_settings
+
+    @staticmethod
+    def _generate_custom_wiring_options(alterations):
+        all_combos = []
+        res = []
+        combinations = list(itertools.combinations(ascii_uppercase, 2))
+        for _ in range(alterations):
+            all_combos.append(["".join(combo) for combo in combinations if combo[0] != combo[1]])
+        for item in itertools.product(*all_combos):
+            combos = "".join(item)
+            if len(combos) == len(set(combos)):
+                res.append(combos)
+        return res
