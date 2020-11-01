@@ -1,11 +1,11 @@
 from unittest import TestCase
-from utils import Switchboard
+from utils import Plugboard, PlugLead
 
 
-class Test_Switchboard(TestCase):
+class Test_Plugboard(TestCase):
 
     def setUp(self):
-        self.swapper = Switchboard(pairs=["NI", "KF", "PY", "VB", "CG",
+        self.swapper = Plugboard(pairs=["NI", "KF", "PY", "VB", "CG",
                                           "WR", "TQ", "OS", "LH", "DZ"])
         # 2020-10-10 MC: Might be worth adding another pairs_dict for the other test cases.
         self.expected_pairs_dict = {"N": "I", "K": "F", "P": "Y", "V": "B", "C": "G",
@@ -20,12 +20,32 @@ class Test_Switchboard(TestCase):
 
     def test_flow_through(self):
         self.swapper._pairs_dict = self.expected_pairs_dict
-        self.assertEqual("A", self.swapper.flow_through("A"))
-        self.assertEqual("F", self.swapper.flow_through("K"))
-        self.assertEqual("K", self.swapper.flow_through("F"))
+        self.assertEqual("A", self.swapper.encode("A"))
+        self.assertEqual("F", self.swapper.encode("K"))
+        self.assertEqual("K", self.swapper.encode("F"))
 
     def test_handle_pairs(self):
         self.swapper._pairs_dict = {}
         self.assertDictEqual({}, self.swapper._pairs_dict)
         self.assertDictEqual(self.expected_pairs_dict, self.swapper._handle_pairs())
         self.assertDictEqual(self.expected_pairs_dict, self.swapper._pairs_dict)
+
+    def test_required_for_coursework_pluglead(self):
+        lead = PlugLead("AG")
+        self.assertEqual("G", lead.encode("A"))
+        self.assertEqual("D", lead.encode("D"))
+
+        lead = PlugLead("DA")
+        self.assertEqual("D", lead.encode("A"))
+        self.assertEqual("A", lead.encode("D"))
+
+    def test_required_for_coursework_plugboard(self):
+        plugboard = Plugboard()
+
+        plugboard.add(PlugLead("SZ"))
+        plugboard.add(PlugLead("GT"))
+        plugboard.add(PlugLead("DV"))
+        plugboard.add(PlugLead("KU"))
+
+        self.assertEqual("U", plugboard.encode("K"))
+        self.assertEqual("A", plugboard.encode("A"))

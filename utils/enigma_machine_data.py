@@ -12,16 +12,22 @@ class EnigmaMachineData:
         return self._machine
 
     def set_machine(self, machine):
-        self._machine = machine
+        self._machine = machine.lower()
 
     def get_rotor(self, rotor):
-        return self._loaded_json[self._machine]['rotor'].get(rotor)
+        rotor_data = self._loaded_json[self._machine]['rotor'].get(rotor.lower())
+        if rotor_data:
+            return rotor_data.copy()
 
     def get_reflector(self, reflector):
-        return self._loaded_json[self._machine]['reflector'].get(reflector)
+        reflector_data = self._loaded_json[self._machine]['reflector'].get(reflector.lower())
+        if reflector_data:
+            return reflector_data.copy()
 
     def get_entry_wheel(self, entry_wheel):
-        return self._loaded_json[self._machine]['entry_wheel'].get(entry_wheel)
+        etw_data = self._loaded_json[self._machine]['entry_wheel'].get(entry_wheel.lower())
+        if etw_data:
+            return etw_data.copy()
 
     def list_rotors(self):
         rotors = list(self._loaded_json[self._machine]['rotor'].keys())

@@ -8,6 +8,12 @@ class Swapper:
         self._offset = 0
         self._ring_offset = 0
 
+    def encode_right_to_left(self, letter):
+        return self.forward_flow(letter)
+
+    def encode_left_to_right(self, letter):
+        return self.reverse_flow(letter)
+
     def forward_flow(self, letter):
         input_letter = self._add_letter_offset(letter)
         mapped_letter = self._right_to_left(input_letter)

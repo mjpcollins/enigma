@@ -23,4 +23,3 @@ settings.set_switchboard_pairs(['AB', 'XW'])
 enigma = Enigma(settings=settings)
 
 print(enigma.parse("HELLOWORLD"))
-

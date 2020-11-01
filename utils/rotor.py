@@ -7,8 +7,8 @@ class Rotor(Swapper):
     def __init__(self, letters, start_position, turnover,
                  position, ring_setting=0):
         super(Rotor, self).__init__(letters=letters)
-        self._starting_pos = start_position
-        self._turnover = turnover
+        self._starting_pos = start_position.upper()
+        self._turnover = turnover.upper()
         self.set_current_position(self._starting_pos)
         self._position = position
         self.set_ring_setting(ring_setting)

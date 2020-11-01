@@ -1,13 +1,13 @@
 from string import ascii_uppercase
 from utils.scrambler import Scrambler
-from utils.switchboard import Switchboard
+from utils.plugboard import Plugboard
 
 
 class Enigma:
 
     def __init__(self, settings, error_checks=True, correct_case=True):
         self.scrambler = Scrambler(settings=settings)
-        self.switchboard = Switchboard(**settings.get_switchboard_data())
+        self.switchboard = Plugboard(**settings.get_switchboard_data())
         self._error_checks = error_checks
         self._correct_case = correct_case
 
@@ -21,9 +21,9 @@ class Enigma:
             self._run_error_key_checks(letter)
         if self._correct_case:
             letter = letter.upper()
-        current_letter = self.switchboard.flow_through(letter=letter)
+        current_letter = self.switchboard.encode(letter=letter)
         current_letter = self.scrambler.scramble_letter(letter=current_letter)
-        current_letter = self.switchboard.flow_through(letter=current_letter)
+        current_letter = self.switchboard.encode(letter=current_letter)
         return current_letter
 
     def _run_error_parse_checks(self, message):
