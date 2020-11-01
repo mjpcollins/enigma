@@ -32,9 +32,7 @@ class Scrambler:
         # It's faster and more "proper" in python to try & catch the error than to use an if statement
         # https://stackoverflow.com/questions/7604636/better-to-try-something-and-catch-the-exception-or-test-if-its-possible-first
         try:
-            rotors_set.remove(self._rotors[3])
-        except KeyError:
-            pass
+            rotors_set.discard(self._rotors[3])
         except IndexError:
             pass
 
