@@ -128,6 +128,10 @@ class Test_PossibleSettings(TestCase):
         self.assertEqual("EJMZALYXVBWFCRQUONTSPIKHGD", reflector['letters'])
         self.assertEqual("JEMZBLYXVAWFCRQUONTSPIKHGD", swapped_reflector['letters'])
 
+    def test_swap_letter_position(self):
+        swapped_letters = self.ps._swap_letter_position("EJMZALYXVBWFCRQUONTSPIKHGD", [0, 1])
+        self.assertEqual("JEMZALYXVBWFCRQUONTSPIKHGD", swapped_letters)
+
     def test_generate_custom_wiring_options_1_alteration(self):
         self.assertEqual(325, len(self.ps._generate_custom_wiring_options(1)))
         self.assertEqual('AB', self.ps._generate_custom_wiring_options(1)[0])

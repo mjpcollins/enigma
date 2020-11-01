@@ -131,25 +131,27 @@ class PossibleSettings:
                     return None
         return reflector_settings
 
-    @staticmethod
-    def _swap_one_reflector_wire(reflector_settings, swap_letters):
-        ref_letters = list(reflector_settings['letters'])
-        temp_reflector_settings = reflector_settings.copy()
+    def _swap_one_reflector_wire(self, reflector_settings, swap_letters):
         re = Reflector(**reflector_settings)
-        letter1 = swap_letters[0]
-        letter2 = swap_letters[1]
-        swap1_letter = re.forward_flow(swap_letters[0])
-        swap2_letter = re.forward_flow(swap_letters[1])
-        letter1_idx = alpha_to_number(letter1)
-        letter2_idx = alpha_to_number(letter2)
-        swap1_idx = alpha_to_number(swap1_letter)
-        swap2_idx = alpha_to_number(swap2_letter)
-        if len({letter1, letter2, swap1_letter, swap2_letter}) != 4:
+        swap_pair1 = [alpha_to_number(swap_letters[0]),
+                      alpha_to_number(swap_letters[1])]
+        swap_pair2 = [alpha_to_number(re.forward_flow(swap_letters[0])),
+                      alpha_to_number(re.forward_flow(swap_letters[1]))]
+
+        if len(set(swap_pair1 + swap_pair2)) != 4:
             return None
-        ref_letters[swap1_idx], ref_letters[swap2_idx] = ref_letters[swap2_idx], ref_letters[swap1_idx]
-        ref_letters[letter1_idx], ref_letters[letter2_idx] = ref_letters[letter2_idx], ref_letters[letter1_idx]
-        temp_reflector_settings['letters'] = "".join(ref_letters)
-        return temp_reflector_settings
+
+        output_reflector_settings = reflector_settings.copy()
+        letters = self._swap_letter_position(output_reflector_settings['letters'], swap_pair1)
+        letters = self._swap_letter_position(letters, swap_pair2)
+        output_reflector_settings['letters'] = letters
+        return output_reflector_settings
+
+    @staticmethod
+    def _swap_letter_position(letters, swap_pair):
+        letters_list = list(letters)
+        letters_list[swap_pair[0]], letters_list[swap_pair[1]] = letters_list[swap_pair[1]], letters_list[swap_pair[0]]
+        return "".join(letters_list)
 
     def _generate_custom_wiring_options(self, alterations):
         all_combos = []
@@ -170,6 +172,19 @@ class PossibleSettings:
 
     @staticmethod
     def _combos_not_in_set(combination, set_of_combinations):
+        """
+        When swapping wires, an AC swap followed by an IJ swap is identical to JI followed by CA. However,
+        CJ followed by IA is not the same. Checking for this can be tricky, but prime numbers make it easier.
+
+        Every letter is mapped to a prime number (from 2, to 101), multiplied with its pair, and then placed in a list.
+        The list is sorted to give a standard way of representing the various ways of performing identical swaps. This
+        list is added to a set if it hasn't been seen before and ignored if it has been.
+
+        :param combination: String, A combination of pairs to check if it has been seen
+        :param set_of_combinations: Set, All combinations of pairs that have been seen
+        :return: Boolean, True if not in set, False if in set.
+        """
+
         total = list()
         previous = 0
         for idx, letter in enumerate(combination):

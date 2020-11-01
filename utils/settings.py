@@ -9,10 +9,18 @@ class Settings:
         self._switchboard_data = {"pairs": list()}
 
     def __str__(self):
+        # For coding simplicity, the ring setting in the simulator is 1 less than stated on the input.
+        # 1 is added to the print statement so that the output settings make sense.
+        rotor_data = []
+        for rotor in self._rotors_data:
+            rotor_copy = rotor.copy()
+            rotor_copy['ring_setting'] += 1
+            rotor_data.append(rotor_copy)
+
         settings_dict = {'settings': {"reflector": self._reflector_data.get('letters'),
                                       "entry_wheel": self._entry_wheel_data.get('letters'),
                                       "switchboard": self._switchboard_data.get('pairs'),
-                                      "rotors": self._rotors_data}}
+                                      "rotors": rotor_data}}
         return str(settings_dict)
 
     def add_reflector(self, reflector_data):

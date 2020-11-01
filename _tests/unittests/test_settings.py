@@ -104,5 +104,7 @@ class Test_Settings(TestCase):
                                 position=3)
         self.assertEqual("G", self.settings._rotors_data[0]['start_position'])
         self.settings.set_rotor_start_position(0, "K")
-        self.assertEqual(str({'settings': {'reflector': None, 'entry_wheel': '', 'switchboard': [], 'rotors': [{'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'K', 'turnover': 'AM', 'position': 0, 'ring_setting': 0}, {'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'G', 'turnover': 'AM', 'position': 3, 'ring_setting': 0}]}}),
+        self.assertEqual(str({'settings': {'reflector': None, 'entry_wheel': '', 'switchboard': [], 'rotors': [{'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'K', 'turnover': 'AM', 'position': 0, 'ring_setting': 1}, {'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'G', 'turnover': 'AM', 'position': 3, 'ring_setting': 1}]}}),
                          str(self.settings))
+        self.assertEqual([{'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'K', 'turnover': 'AM', 'position': 0, 'ring_setting': 0}, {'letters': 'CDEMUXPNVZBHYFQWKIATGLORSJ', 'start_position': 'G', 'turnover': 'AM', 'position': 3, 'ring_setting': 0}],
+                         self.settings._rotors_data)

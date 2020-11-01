@@ -38,8 +38,3 @@ The Engima machine is best used in conjunction with the EnigmaMachineData class.
     
     print(enigma.parse("HELLOWORLD"))
 
-
-## Quick Start Enigma Machine Cracker
-
-TODO
-
