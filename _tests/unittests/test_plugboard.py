@@ -7,7 +7,6 @@ class Test_Plugboard(TestCase):
     def setUp(self):
         self.swapper = Plugboard(pairs=["NI", "KF", "PY", "VB", "CG",
                                           "WR", "TQ", "OS", "LH", "DZ"])
-        # 2020-10-10 MC: Might be worth adding another pairs_dict for the other test cases.
         self.expected_pairs_dict = {"N": "I", "K": "F", "P": "Y", "V": "B", "C": "G",
                                     "W": "R", "T": "Q", "O": "S", "L": "H", "D": "Z",
                                     "I": "N", "F": "K", "Y": "P", "B": "V", "G": "C",

@@ -5,7 +5,6 @@ from utils import Rotor
 class Test_Rotor(TestCase):
 
     def setUp(self):
-                                        #"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         self.plain_wheel = Rotor(letters="CDEMUXPNVZBHYFQWKIATGLORSJ",
                                  start_position="A",
                                  turnover="E",

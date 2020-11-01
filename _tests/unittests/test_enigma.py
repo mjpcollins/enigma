@@ -253,7 +253,6 @@ class Test_Enigma(TestCase):
         with self.assertRaises(SyntaxError):
             enigma.parse("123")
 
-
     def test_key_states_parser(self):
         settings = Settings()
         data = EnigmaMachineData()
